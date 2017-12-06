@@ -27,17 +27,18 @@
       <button @click="backPage()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>
     </div>
   </div>
-  
+
 </template>
 
 <script>
 import axios from 'axios';
-import router from '../main';
+import router from '../router';
 
-const API_URL = 'http://localhost:8080/api';
+import env from '../environment';
+
+const API_URL = env.API_URL;
 
 export default {
-  name: 'contextManager',
   data() {
     return {
       model: {},

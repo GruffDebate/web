@@ -1,8 +1,9 @@
 /* globals localStorage */
 import axios from 'axios';
-import router from './main';
+import router from './router';
+import env from './environment';
 
-const API_URL = 'http://localhost:8080/api';
+const API_URL = env.API_URL;
 
 export default {
 
@@ -30,7 +31,6 @@ export default {
 
   signup(context, model, redirect) {
     axios.post(`${API_URL}/users`, model).then((response) => {
-      console.log(response);
       localStorage.setItem('gruff_token', JSON.stringify(response.data));
 
       this.user.authenticated = true;
@@ -41,7 +41,7 @@ export default {
       }
     }, (err) => {
       const ctx = context;
-      ctx.error = err;
+      ctx.error = err.message;
     });
   },
 

@@ -116,11 +116,11 @@
 <script>
 import axios from 'axios';
 import auth from '../auth';
+import env from '../environment';
 
-const API_URL = 'http://localhost:8080/api';
+const API_URL = env.API_URL;
 
 export default {
-  name: 'gruff',
   data() {
     return {
       debate: {},
