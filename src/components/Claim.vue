@@ -3,7 +3,7 @@
   <div class="container-fluid">
     <div class="col-md-12">
       <div class="col-md-6">
-        <h2 style="text-align: left;">Manager Context</h2>
+        <h2 style="text-align: left;">Manager Claims</h2>
       </div>
       <div class="col-md-1 pull-right" style="margin-top: 20px;">
         <button @click="newPage(0)" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Create</button>
@@ -15,27 +15,25 @@
           <tr>
             <th class="mdl-data-table__cell--non-numeric">Title</th>
             <th class="mdl-data-table__cell--non-numeric">Description</th>
-            <th class="mdl-data-table__cell--non-numeric">URL</th>
-            <th class="mdl-data-table__cell--non-numeric">Google KG ID</th>
-            <th class="mdl-data-table__cell--non-numeric">Wikidata ID</th>
+            <th class="mdl-data-table__cell--non-numeric">Truth</th>
+            <th class="mdl-data-table__cell--non-numeric">Truth Roll Up</th>
             <th class="mdl-data-table__cell--non-numeric">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in contexts" v-bind:key="item.id">
+          <tr v-for="item in claims" v-bind:key="item.id">
             <td class="mdl-data-table__cell--non-numeric">{{item.title}}</td>
             <td class="mdl-data-table__cell--non-numeric">{{item.desc}}</td>
-            <td class="mdl-data-table__cell--non-numeric">{{item.url}}</td>
-            <td class="mdl-data-table__cell--non-numeric">{{item.mid}}</td>
-            <td class="mdl-data-table__cell--non-numeric">{{item.qid}}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{item.truth}}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{item.truthRU}}</td>
             <td class="mdl-data-table__cell--non-numeric">
               <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" @click="edit(item)">Edit</button>
             </td>
           </tr>
         </tbody>
       </table>
-      <div v-show="this.contexts.length == 0">
-        <h3 class="align-center">You do not have any Context</h3>
+      <div v-show="this.claims.length == 0">
+        <h3 class="align-center">You do not have any Claim</h3>
       </div>
     </div>
   </div>
@@ -52,7 +50,7 @@ const API_URL = env.API_URL;
 export default {
   data() {
     return {
-      contexts: [],
+      claims: [],
     };
   },
 
@@ -62,17 +60,17 @@ export default {
 
   methods: {
     list() {
-      axios.get(`${API_URL}/contexts`).then((response) => {
-        this.contexts = response.data;
+      axios.get(`${API_URL}/users/claims`).then((response) => {
+        this.claims = response.data;
       });
     },
 
     newPage(id) {
-      router.push(`/context/${id}`);
+      router.push(`/claim/${id}`);
     },
 
     edit(item) {
-      router.push(`/context/${item.id}`);
+      router.push(`/claim/${item.uuid}`);
     },
   },
 };

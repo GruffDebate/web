@@ -17,6 +17,7 @@
           <router-link class="mdl-navigation__link" to="/login" v-if="!user.authenticated">Login</router-link>
           <router-link class="mdl-navigation__link" to="/user" v-if="user.authenticated">Hi, {{user.name}}</router-link>
           <router-link class="mdl-navigation__link" to="/context" v-if="user.authenticated">Context</router-link>
+          <router-link class="mdl-navigation__link" to="/claim" v-if="user.authenticated">Claim</router-link>
           <a class="mdl-navigation__link" @click="logout()" v-if="user.authenticated">Logout</a>
         </nav>
       </div>

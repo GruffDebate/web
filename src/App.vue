@@ -1,11 +1,13 @@
 <template>
   <div id="app">
+    <simplert></simplert>
     <navbar></navbar>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -14,6 +16,8 @@ import User from './components/User';
 import Gruff from './components/Gruff';
 import Context from './components/Context';
 import ContextManager from './components/ContextManager';
+import Claim from './components/Claim';
+import ClaimManager from './components/ClaimManager';
 
 export default {
   name: 'app',
@@ -26,6 +30,8 @@ export default {
     Gruff,
     Context,
     ContextManager,
+    Claim,
+    ClaimManager,
   },
 };
 </script>

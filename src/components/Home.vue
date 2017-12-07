@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="col-md-9">
       <h1>Top Debates</h1>
-      <div class="col-md-12 demo-card-wide mdl-card mdl-shadow--2dp" style="margin: 20px 0;" v-for="item in claimsTop">
+      <div class="col-md-12 demo-card-wide mdl-card mdl-shadow--2dp" style="margin: 20px 0;" v-for="item in claimsTop" v-bind:key="item.uuid">
         <div class="mdl-card__title">
           <h2 class="mdl-card__title-text">{{item.title}}</h2>
         </div>
@@ -22,7 +22,7 @@
     <hr>
     <div class="col-md-9">
       <h1>Recent Debates</h1>
-      <div class="col-md-12 demo-card-wide mdl-card mdl-shadow--2dp" style="margin: 20px 0;" v-for="item in claims">
+      <div class="col-md-12 demo-card-wide mdl-card mdl-shadow--2dp" style="margin: 20px 0;" v-for="item in claims" v-bind:key="item.uuid">
         <div class="mdl-card__title">
           <h2 class="mdl-card__title-text">{{item.title}}</h2>
         </div>
