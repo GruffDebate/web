@@ -18,7 +18,7 @@ export default {
 
       this.user.authenticated = true;
       this.user.name = response.data.user.name;
-      this.loggedIn();
+      this.loggedIn(JSON.stringify(response.data));
 
       if (redirect !== undefined) {
         router.push(redirect);
@@ -35,9 +35,11 @@ export default {
 
       this.user.authenticated = true;
       this.user.name = response.data.user.name;
+      this.loggedIn(JSON.stringify(response.data));
 
       if (redirect !== undefined) {
         router.push(redirect);
+        window.location.reload();
       }
     }, (err) => {
       const ctx = context;
@@ -49,12 +51,13 @@ export default {
     localStorage.removeItem('gruff_token');
     this.user.authenticated = false;
     this.user.name = '';
-    router.push('/');
+    // router.push('/');
+    window.location = '/';
   },
 
-  loggedIn() {
-    const auth = localStorage.getItem('gruff_token');
-    const token = JSON.parse(localStorage.getItem('gruff_token'));
+  loggedIn(data) {
+    const auth = localStorage.getItem('gruff_token') || data;
+    const token = JSON.parse(localStorage.getItem('gruff_token') || data);
     if (auth !== null) {
       this.user.authenticated = true;
       this.user.name = token.user.name;

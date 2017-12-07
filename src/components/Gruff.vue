@@ -143,13 +143,18 @@ export default {
     list() {
       axios.get(`${API_URL}/claims/${this.$route.params.id}`).then((response) => {
         const debate = response.data;
-        for (let i = 0; i < debate.protruth.length; i += 1) {
-          debate.protruth[i].isShow = false;
+        if (debate.protruth !== undefined) {
+          for (let i = 0; i < debate.protruth.length; i += 1) {
+            debate.protruth[i].isShow = false;
+          }
         }
 
-        for (let i = 0; i < debate.contruth.length; i += 1) {
-          debate.contruth[i].isShow = false;
+        if (debate.contruth !== undefined) {
+          for (let i = 0; i < debate.contruth.length; i += 1) {
+            debate.contruth[i].isShow = false;
+          }
         }
+
         this.debate = debate;
       });
     },

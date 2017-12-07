@@ -3,7 +3,7 @@
   <div class="container-fluid">
     <div class="col-md-12">
       <div class="col-md-6">
-        <h2 style="text-align: left;">Manager Context</h2>
+        <h2 style="text-align: left;">Manage Context</h2>
       </div>
       <div class="col-md-1 pull-right" style="margin-top: 20px;">
         <button @click="newPage(0)" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Create</button>

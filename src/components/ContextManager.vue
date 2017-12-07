@@ -2,7 +2,7 @@
 
   <div class="container-fluid">
     <div class="col-md-8 col-md-offset-2">
-      <h3 style="text-align:left; margin-bottom:30px">Manager a context</h3>
+      <h3 style="text-align:left; margin-bottom:30px">Create/Edit a context</h3>
       <div class="form-group">
         <label>Title</label>
         <input type="text" class="form-control" placeholder="Title" v-model="model.title">

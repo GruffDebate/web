@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="col-md-8 col-md-offset-2">
-      <h3 style="text-align:left; margin-bottom:30px">Create a claim</h3>
+      <h3 style="text-align:left; margin-bottom:30px">Create/Edit a claim</h3>
       <div class="form-group">
         <label>Title</label>
         <input type="text" class="form-control" placeholder="Title" v-model="model.title">
@@ -10,10 +10,10 @@
         <label>Description</label>
         <textarea class="form-control" placeholder="Description" v-model="model.desc" rows="4"></textarea>
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label>Truth</label>
         <input type="number" class="form-control" placeholder="Description" v-model="model.truth">
-      </div>
+      </div> -->
       <button @click="save()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Save</button>
       <button @click="backPage()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>
     </div>
