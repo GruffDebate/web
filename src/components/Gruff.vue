@@ -116,9 +116,9 @@
 <script>
 import axios from 'axios';
 import auth from '../auth';
-import env from '../environment';
 
-const API_URL = env.API_URL;
+/* eslint-disable no-undef */
+const API_URL = API;
 
 export default {
   data() {

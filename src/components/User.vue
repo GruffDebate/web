@@ -23,9 +23,8 @@
 import axios from 'axios';
 import router from '../router';
 
-import env from '../environment';
-
-const API_URL = env.API_URL;
+/* eslint-disable no-undef */
+const API_URL = API;
 
 export default {
   data() {

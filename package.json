@@ -5,8 +5,8 @@
   "author": "Bruno Sato <bruno.sato@live.com>",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",
-    "build": "node build/build.js",
+    "dev": "NODE_ENV=development node build/dev-server.js",
+    "build": "NODE_ENV=production node build/build.js",
     "unit": "karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",

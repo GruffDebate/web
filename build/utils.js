@@ -59,3 +59,20 @@ exports.styleLoaders = function (options) {
   }
   return output
 }
+
+exports.apiHost = function () {
+  var apiHost = '';
+  switch (process.env.NODE_ENV) {
+    case 'production':
+      apiHost = "'https://rory6p632g.execute-api.us-west-2.amazonaws.com/development/api'";
+      break;
+    case 'development':
+      apiHost = "'http://localhost:8080/api'";
+    break;
+    default:
+      apiHost = "'http://localhost:8080/api'";
+      break;
+  }
+
+  return apiHost;
+}
