@@ -10,7 +10,7 @@
     <div class="col-md-6">
       <div class="col-md-12">
         <div>
-          <h3>Arguments in Favor</h3>
+          <h3>Arguments Favor</h3>
           <button @click="argumentFavor()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Add a new Argument</button>
         </div>
       </div>
@@ -62,7 +62,7 @@
     <div class="col-md-6">
       <div class="col-md-12">
         <div>
-          <h3>Arguments in Against</h3>
+          <h3>Arguments Against</h3>
           <button @click="argumentAgainst()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Add a new Argument</button>
         </div>
       </div>
