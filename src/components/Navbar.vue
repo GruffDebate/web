@@ -54,16 +54,21 @@
     <v-spacer></v-spacer>
     <v-toolbar-side-icon class="hidden-md-and-up"></v-toolbar-side-icon>
     <v-toolbar-title v-if="!user.authenticated">
-      <router-link class="topbar-item" to="/login">Log in</router-link>
+      <v-btn @click="go('/login')" outline color="primary" slot="activator" class="blue radius">
+        Log in
+      </v-btn>
     </v-toolbar-title>
     <v-toolbar-title v-if="!user.authenticated">
-      <router-link class="topbar-item" to="/login">Sign up</router-link>
+      <v-btn @click="go('/signup')" color="primary" dark slot="activator" class="blue radius">
+        Sign up
+      </v-btn>
+      <!-- <router-link class="topbar-item" to="/login" style="margin-left: 25px;">Sign up</router-link> -->
     </v-toolbar-title>
     <v-toolbar-title v-if="user.authenticated">
       <router-link class="topbar-item" to="/user">Hi, {{user.name}}</router-link>
     </v-toolbar-title>
     <v-toolbar-title v-if="user.authenticated">
-      <router-link class="topbar-item" to="/user" style="margin-left: 25px;">Logout</router-link>
+      <a class="topbar-item" @click="logout()" v-if="user.authenticated" style="margin-left: 25px;">Logout</a>
     </v-toolbar-title>
     <!-- <v-menu offset-y>
       <v-btn color="primary" dark slot="activator" class="purple">
@@ -90,6 +95,7 @@
 <script>
 
 import auth from '../auth';
+import router from '../router';
 
 export default {
   name: 'navbar',
@@ -102,6 +108,10 @@ export default {
   methods: {
     logout() {
       auth.logout();
+    },
+
+    go(page) {
+      router.push(page);
     },
   },
 };
@@ -126,6 +136,7 @@ export default {
     line-height: 1.5;
     color: #a9b0b8;
     text-decoration: none;
+    cursor: pointer;
   }
 
   .topbar-item:hover {
@@ -134,5 +145,9 @@ export default {
 
   .mdl-layout__header-row {
     padding: 0 25px 0 25px;
+  }
+
+  .radius {
+    border-radius: 4px;
   }
 </style>
