@@ -3,7 +3,9 @@
     <div class="col-md-12 left">
       <h1>{{debate.title}}</h1>
       <h4>{{debate.desc}}</h4>
-      <p>Tags: </p>
+      <ul class="tags" v-for="item in debate.tags" v-bind:key="item.id">
+        <li><a class="tag">{{item.title}}</a></li>
+      </ul>
     </div>
 
     <!-- ProTruth -->
@@ -38,17 +40,17 @@
           <div class="mdl-card__supporting-text">
             <ul v-for="item in debate.protruth" v-bind:key="item.uuid">
               <i v-show="item.createdById == userIdLogged" class="fa fa-pencil" aria-hidden="true" style="margin-right:10px; cursor: pointer;" @click="edit('favor', item)"></i>
-              <a @click="item.isShow = !item.isShow" v-if="item.title != ''">{{item.title}} -
-                <span v-if="item.claim != undefined" style="color:#000;">Truth: {{item.claim.truth}}</span>
+              <a @click="goClaim(item)" v-if="item.title != ''" style="font-size: 18px;">{{item.title}} -
+                <span v-if="item.claim != undefined" style="color:#000; font-size: 13px;">Truth: {{item.claim.truth}}</span>
               </a>
-              <a @click="item.isShow = !item.isShow" v-else>{{item.claim.title}} -
-                <span v-if="item.claim != undefined" style="color:#000;">Truth: {{item.claim.truth}}</span>
+              <a @click="goClaim(item)" v-else style="font-size: 18px;">{{item.claim.title}} -
+                <span v-if="item.claim != undefined" style="color:#000; font-size: 13px;">Truth: {{item.claim.truth}}</span>
               </a>
               <!-- <ul style="list-style: none; margin-left: 25px;">
                 <li>Impact: {{item.impact}}</li>
                 <li>Relevance: {{item.relevance}}</li>
               </ul> -->
-              <ul style="list-style: none; margin-left: 25px;" v-show="item.isShow">
+              <ul style="list-style: none; margin-left: 25px;">
                 <li v-if="item.desc != ''">{{item.desc}}</li>
                 <li v-else>{{item.claim.desc}}</li>
               </ul>
@@ -116,6 +118,7 @@
 <script>
 import axios from 'axios';
 import auth from '../auth';
+import router from '../router';
 
 /* eslint-disable no-undef */
 const API_URL = API;
@@ -137,6 +140,10 @@ export default {
   created() {
     this.userIdLogged = auth.getLoggedId();
     this.list();
+  },
+
+  watch: {
+    $route: 'list',
   },
 
   methods: {
@@ -292,6 +299,10 @@ export default {
       this.formAgainst = false;
       this.formFavor = false;
     },
+
+    goClaim(item) {
+      router.push(`/gruff/${item.claimId}`);
+    },
   },
 };
 </script>
@@ -315,5 +326,63 @@ export default {
 
   .space {
     margin-top: 40px;
+  }
+
+  .tags {
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    display: inline;
+  }
+
+  .tags li {
+    float: left;
+  }
+
+  .tag {
+    background: #eee;
+    border-radius: 3px 0 0 3px;
+    color: #999;
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 20px 0 23px;
+    position: relative;
+    margin: 0 10px 10px 0;
+    text-decoration: none;
+    -webkit-transition: color 0.2s;
+  }
+
+  .tag::before {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+    content: '';
+    height: 6px;
+    left: 10px;
+    position: absolute;
+    width: 6px;
+    top: 10px;
+  }
+
+  .tag::after {
+    background: #fff;
+    border-bottom: 13px solid transparent;
+    border-left: 10px solid #eee;
+    border-top: 13px solid transparent;
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .tag:hover {
+    background-color: crimson;
+    color: white;
+  }
+
+  .tag:hover::after {
+    border-left-color: crimson;
   }
 </style>

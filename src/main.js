@@ -3,14 +3,17 @@
 /* globals localStorage */
 
 import Simplert from 'vue2-simplert-plugin';
+import vSelect from 'vue-select';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import router from './router';
 import App from './App';
 
+
 Vue.use(Simplert);
 Vue.use(VueRouter);
+Vue.component('v-select', vSelect);
 
 /* eslint-disable no-new */
 new Vue({

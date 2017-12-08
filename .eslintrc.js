@@ -29,7 +29,7 @@ module.exports = {
     // allow console during development
     'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-global-assign': [ 'error', {
-        "exceptions": [ "window" ]
+      "exceptions": [ "window" ]
     }],
   }
 }
