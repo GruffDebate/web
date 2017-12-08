@@ -367,7 +367,7 @@ export default {
   }
 
   .tag::after {
-    background: #fff;
+    background: #fafcfd;
     border-bottom: 13px solid transparent;
     border-left: 10px solid #eee;
     border-top: 13px solid transparent;

@@ -21,7 +21,8 @@
     "vue-swipe": "^2.0.2",
     "vue-template-compiler": "^2.1.9",
     "vue2-simplert": "^0.5.8",
-    "vue2-simplert-plugin": "0.0.2"
+    "vue2-simplert-plugin": "0.0.2",
+    "vuetify": "^0.17.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

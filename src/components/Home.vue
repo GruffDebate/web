@@ -19,7 +19,7 @@
     <div class="col-md-3">
       <h2>Tags</h2>
     </div>
-    <hr>
+    <!-- <hr> -->
     <div class="col-md-9">
       <h1>Recent Debates</h1>
       <div class="col-md-12 demo-card-wide mdl-card mdl-shadow--2dp" style="margin: 20px 0;" v-for="item in claims" v-bind:key="item.uuid">

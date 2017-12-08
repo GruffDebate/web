@@ -4,15 +4,18 @@
 
 import Simplert from 'vue2-simplert-plugin';
 import vSelect from 'vue-select';
+import Vuetify from 'vuetify';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import router from './router';
 import App from './App';
 
+import '../node_modules/vuetify/dist/vuetify.min.css';
 
 Vue.use(Simplert);
 Vue.use(VueRouter);
+Vue.use(Vuetify);
 Vue.component('v-select', vSelect);
 
 /* eslint-disable no-new */
