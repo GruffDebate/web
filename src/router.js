@@ -32,6 +32,7 @@ export default new VueRouter({
   base: __dirname,
   routes: [
     { path: '/', component: App.components.Home },
+    { path: '/tags/:id', component: App.components.ClaimTags },
     { path: '/gruff/:id', component: App.components.Gruff },
     { path: '/user', component: App.components.User, beforeEnter: requireAuth },
     { path: '/context', component: App.components.Context, beforeEnter: requireAuth },

@@ -18,6 +18,7 @@ import Context from './components/Context';
 import ContextManager from './components/ContextManager';
 import Claim from './components/Claim';
 import ClaimManager from './components/ClaimManager';
+import ClaimTags from './components/ClaimTags';
 
 export default {
   name: 'app',
@@ -32,6 +33,7 @@ export default {
     ContextManager,
     Claim,
     ClaimManager,
+    ClaimTags,
   },
 };
 </script>
