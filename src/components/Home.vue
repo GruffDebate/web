@@ -28,7 +28,7 @@
     </div>
     <div class="col-xs-2 hidden-xs hidden-sm" style="padding-left: 30px;">
       <p class="popular-title">Popular Tags</p>
-      <ul class="popular-tags" v-for="item in tags.slice(0, 20)" v-bind:key="item.id">
+      <ul class="popular-tags" v-for="item in tags" v-bind:key="item.id">
         <li>
           <a class="popular-tag" @click="goTags(item)">{{item.title}}</a>
         </li>
@@ -82,8 +82,8 @@ export default {
     },
 
     listTags() {
-      axios.get(`${API_URL}/tags`).then((response) => {
-        this.tags = response.data;
+      axios.get(`${API_URL}/tags?start=0&limit=20`).then((response) => {
+        this.tags = response.data.results;
       });
     },
 

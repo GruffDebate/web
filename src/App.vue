@@ -115,7 +115,7 @@ export default {
 }
 
 .tag::after {
-  background: #fafcfd;
+  background: #fff;
   border-bottom: 13px solid transparent;
   border-left: 10px solid #eee;
   border-top: 13px solid transparent;
@@ -128,6 +128,7 @@ export default {
 .tag:hover {
   background-color: crimson;
   color: white;
+  text-decoration: none;
 }
 
 .tag:hover::after {
