@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <simplert></simplert>
-    <navbar></navbar>
-    <router-view></router-view>
+    <v-app>
+      <simplert></simplert>
+      <navbar></navbar>
+      <router-view></router-view>
+    </v-app>
   </div>
 </template>
 
