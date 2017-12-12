@@ -21,7 +21,9 @@
         v-model="credentials.password"
       >
     </div>
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" @click="submit()">Log In</button>
+    <v-btn @click="submit()" color="primary" dark slot="activator" class="blue radius">
+      Log In
+    </v-btn>
   </div>
 </template>
 

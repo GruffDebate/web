@@ -19,20 +19,39 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-title v-if="!user.authenticated" class="hidden-sm-and-down">
-      <v-btn @click="go('/login')" outline color="primary" slot="activator" class="blue radius">
+      <v-btn @click="go('/login')" outline slot="activator" color="primary" class="blue radius">
         Log in
       </v-btn>
     </v-toolbar-title>
-    <v-toolbar-title v-if="!user.authenticated" class="hidden-sm-and-down">
-      <v-btn @click="go('/signup')" color="primary" dark slot="activator" class="blue radius">
+    <v-toolbar-title v-if="!user.authenticated" class="hidden-sm-and-down" style="margin-right: 15px;">
+      <v-btn @click="go('/signup')" slot="activator" color="primary" dark class="blue radius">
         Sign up
       </v-btn>
     </v-toolbar-title>
+    <v-toolbar-side-icon slot="activator">
+      Hi, {{user.name}}
+    </v-toolbar-side-icon>
+    <v-menu class="hidden-sm-and-down" offset-y transition="slide-x-transition" bottom right v-if="user.authenticated">
+      <v-toolbar-title slot="activator">
+        <span class="topbar-item">Hi, {{user.name}}</span>
+        <v-icon>arrow_drop_down</v-icon>
+      </v-toolbar-title>
+      <v-list>
+        <v-list-tile>
+          <v-list-tile-title>
+            <router-link to="/profile">Profile</router-link>
+          </v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-title>
+            <router-link to="/password">Password</router-link>
+          </v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-menu>
+
     <v-toolbar-title v-if="user.authenticated" class="hidden-sm-and-down">
-      <router-link class="topbar-item" to="/user">Hi, {{user.name}}</router-link>
-    </v-toolbar-title>
-    <v-toolbar-title v-if="user.authenticated" class="hidden-sm-and-down">
-      <a class="topbar-item" @click="logout()" style="margin-left: 25px;">Logout</a>
+      <a class="topbar-item" @click="logout()" style="margin-left: 25px; margin-right: 20px;">Logout</a>
     </v-toolbar-title>
 
     <v-menu offset-y class="hidden-md-and-up" transition="slide-x-transition" bottom right>
@@ -42,7 +61,12 @@
       <v-list>
         <v-list-tile v-if="user.authenticated">
           <v-list-tile-title>
-            <router-link to="/user">Hi, {{user.name}}</router-link>
+            <router-link to="/profile">Hi, {{user.name}}</router-link>
+          </v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile v-if="user.authenticated">
+          <v-list-tile-title>
+            <router-link to="/password">Password</router-link>
           </v-list-tile-title>
         </v-list-tile>
         <v-divider v-if="user.authenticated" class="line"></v-divider>
@@ -94,7 +118,7 @@ export default {
   data() {
     return {
       user: auth.user,
-      drawer: false,
+      menu: false,
     };
   },
 
@@ -120,7 +144,7 @@ export default {
 
   .topbar {
     background-color: #fff;
-    border-bottom: 1px solid #f1f3f4;
+    border-bottom: 1px solid #eee;
   }
 
   .topbar-item {

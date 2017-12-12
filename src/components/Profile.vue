@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="col-md-8 col-md-offset-2">
       <h3 style="text-align:left; margin-bottom:30px">User Settings</h3>
       <div class="form-group">
@@ -13,7 +13,9 @@
         <label>Url</label>
         <input type="text" class="form-control" placeholder="Url" v-model="model.url">
       </div>
-      <button @click="save()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Save</button>
+      <v-btn @click="save()" color="primary" dark slot="activator" class="blue radius">
+        Save
+      </v-btn>
       <button @click="backPage()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>
     </div>
   </div>

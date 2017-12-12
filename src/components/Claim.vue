@@ -1,43 +1,37 @@
 <template>
-
-  <div class="container-fluid">
-    <div class="col-md-12">
-      <div class="col-md-6">
-        <h2 style="text-align: left;">Manage Claims</h2>
-      </div>
-      <div class="col-md-1 pull-right" style="margin-top: 20px;">
-        <button @click="newPage(0)" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Create</button>
+  <div>
+    <div class="container-fluid hero">
+      <div class="hero_area">
+        <div class="hero-area__content">
+          <div class="tag-page__info">
+            <h1 class="tag-page__name">Manage Your Claims</h1>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-md-12">
-      <table class="table-context mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-        <thead>
-          <tr>
-            <th class="mdl-data-table__cell--non-numeric">Title</th>
-            <th class="mdl-data-table__cell--non-numeric">Description</th>
-            <th class="mdl-data-table__cell--non-numeric">Truth</th>
-            <th class="mdl-data-table__cell--non-numeric">Truth Roll Up</th>
-            <th class="mdl-data-table__cell--non-numeric">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in claims" v-bind:key="item.id">
-            <td class="mdl-data-table__cell--non-numeric">{{item.title}}</td>
-            <td class="mdl-data-table__cell--non-numeric">{{item.desc}}</td>
-            <td class="mdl-data-table__cell--non-numeric">{{item.truth}}</td>
-            <td class="mdl-data-table__cell--non-numeric">{{item.truthRU}}</td>
-            <td class="mdl-data-table__cell--non-numeric">
-              <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" @click="edit(item)">Edit</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div v-show="this.claims.length == 0">
-        <h3 class="align-center">You do not have any Claim</h3>
+    <div class="container">
+      <div class="col-md-1" style="margin-bottom: 20px;">
+        <v-btn @click="newPage(0)" color="primary" dark slot="activator" class="blue radius">
+          Create Claim
+        </v-btn>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 reset-col">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" v-for="item in claims" v-bind:key="item.uuid">
+          <v-card height="300" class="thumbnail">
+            <v-card-title style="height: 247px;">
+              <div>
+                <h4>{{item.title}}</h4><br>
+                <span class="limit-text">{{item.desc}}</span>
+              </div>
+            </v-card-title>
+            <v-card-actions style="border-top: 1px solid rgba(0,0,0,.1); height: 46px; justify-content: center;">
+              <v-btn flat color="orange" @click="edit(item)">Edit It</v-btn>
+            </v-card-actions>
+          </v-card>
+        </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -80,5 +74,9 @@ export default {
 <style scoped>
   .table-context {
     width: 100%;
+  }
+
+  .card__title {
+    align-items: flex-start;
   }
 </style>

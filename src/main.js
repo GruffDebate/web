@@ -5,6 +5,7 @@
 import Simplert from 'vue2-simplert-plugin';
 import vSelect from 'vue-select';
 import Vuetify from 'vuetify';
+import SocialSharing from 'vue-social-sharing';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -16,6 +17,7 @@ import '../node_modules/vuetify/dist/vuetify.min.css';
 Vue.use(Simplert);
 Vue.use(VueRouter);
 Vue.use(Vuetify);
+Vue.use(SocialSharing);
 Vue.component('v-select', vSelect);
 
 /* eslint-disable no-new */

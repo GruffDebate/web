@@ -14,13 +14,17 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import User from './components/User';
+
 import Gruff from './components/Gruff';
 import Context from './components/Context';
 import ContextManager from './components/ContextManager';
 import Claim from './components/Claim';
 import ClaimManager from './components/ClaimManager';
 import ClaimTags from './components/ClaimTags';
+
+// User
+import Profile from './components/Profile';
+import Password from './components/Password';
 
 export default {
   name: 'app',
@@ -29,13 +33,14 @@ export default {
     Navbar,
     Login,
     Signup,
-    User,
+    Profile,
     Gruff,
     Context,
     ContextManager,
     Claim,
     ClaimManager,
     ClaimTags,
+    Password,
   },
 };
 </script>
@@ -135,5 +140,76 @@ export default {
 
 .tag:hover::after {
   border-left-color: crimson;
+}
+
+.hero {
+    background-color: #A7A8AA;
+    margin-bottom: 40px;
+  }
+
+.hero_area {
+  height: 140px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 64px;
+  color: #fff;
+  position: relative;
+  z-index: 0;
+}
+
+.hero-area__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+.tag-page__info {
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.tag-page__name {
+  font-weight: 400;
+  font-size: 45px;
+  line-height: 1.2;
+  color: inherit;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .tag-page__name {
+    font-size: 35px;
+  }
+}
+
+.form-control, .v-select .dropdown-toggle {
+  border: 1px solid #e6e9eb;
+  border-radius: 4px;
+  box-shadow: none;
+  height: 42px;
+}
+
+.form-control:focus {
+  border-color: #e6e9eb;
+  box-shadow: none;
+}
+
+.v-select .selected-tag{
+  margin: 7px 1px 0 3px;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.btn {
+  margin: 6px 0px !important;
 }
 </style>

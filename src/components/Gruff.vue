@@ -11,18 +11,18 @@
     </div>
     <div class="col-xs-12 claim-arguments">
       <div class="col-xs-6">
-        <div class="col-xs-10">
+        <div class="col-xs-6 col-sm-6 col-md-10 col-lg-10">
           <p class="argument-favor">Favor</p>
         </div>
-        <div class="col-xs-2">
+        <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
           <i class="fa fa-plus-square argument-favor-icon" aria-hidden="true" @click="argumentFavor()"></i>
         </div>
       </div>
       <div class="col-xs-6">
-        <div class="col-xs-10">
+        <div class="col-xs-7 col-sm-6 col-md-10 col-lg-10">
           <p class="argument-against">Against</p>
         </div>
-        <div class="col-xs-2">
+        <div class="col-xs-5 col-sm-6 col-md-2 col-lg-2">
           <i class="fa fa-plus-square argument-against-icon" aria-hidden="true" @click="argumentAgainst()"></i>
         </div>
       </div>
@@ -83,101 +83,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="col-md-6">
-      <div class="col-md-12">
-        <div>
-          <h3>Arguments Favor</h3>
-          <button @click="argumentFavor()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Add a new Argument</button>
-        </div>
-      </div>
-      <div class="col-md-12 space-20 left" v-if="formFavor">
-        <div v-if="isError1" class="alert alert-danger" role="alert">
-          {{favorError}}
-        </div>
-        <h4>Add a New Debate</h4>
-        <div class="form-group">
-          <label>Argument Title</label>
-          <input type="text" class="form-control" placeholder="Title" v-model="argFavor.title">
-        </div>
-        <div class="form-group">
-          <label>Argument Description</label>
-          <input type="text" class="form-control" placeholder="Description" v-model="argFavor.desc">
-        </div>
-        <button @click="saveFavor()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Send It</button>
-        <button @click="cancel()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>
-      </div>
-      <div class="col-md-12 space left">
-        <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="width: 100%;">
-          <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">Arguments</h2>
-          </div>
-          <div class="mdl-card__supporting-text">
-            <ul v-for="item in debate.protruth" v-bind:key="item.uuid">
-              <i v-show="item.createdById == userIdLogged" class="fa fa-pencil" aria-hidden="true" style="margin-right:10px; cursor: pointer;" @click="edit('favor', item)"></i>
-              <a @click="goClaim(item)" v-if="item.title != ''" style="font-size: 18px;">{{item.title}} -
-                <span v-if="item.claim != undefined" style="color:#000; font-size: 13px;">Truth: {{item.claim.truth}}</span>
-              </a>
-              <a @click="goClaim(item)" v-else style="font-size: 18px;">{{item.claim.title}} -
-                <span v-if="item.claim != undefined" style="color:#000; font-size: 13px;">Truth: {{item.claim.truth}}</span>
-              </a>
-              <ul style="list-style: none; margin-left: 25px;">
-                <li v-if="item.desc != ''">{{item.desc}}</li>
-                <li v-else>{{item.claim.desc}}</li>
-              </ul>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="col-md-12">
-        <div>
-          <h3>Arguments Against</h3>
-          <button @click="argumentAgainst()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Add a new Argument</button>
-        </div>
-      </div>
-      <div class="col-md-12 left space-20" v-if="formAgainst">
-        <div v-if="isError2" class="alert alert-danger" role="alert">
-          {{favorError}}
-        </div>
-        <h4>Add a New Debate</h4>
-        <div class="form-group">
-          <label>Argument Title</label>
-          <input type="text" class="form-control" placeholder="Title" v-model="argAgainst.title">
-        </div>
-        <div class="form-group">
-          <label>Argument Description</label>
-          <input type="text" class="form-control" placeholder="Description" v-model="argAgainst.desc">
-        </div>
-        <button @click="saveAgainst()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Send It</button>
-        <button @click="cancel()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>
-      </div>
-      <div class="col-md-12 space left">
-        <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="width: 100%;">
-          <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">Arguments</h2>
-          </div>
-          <div class="mdl-card__supporting-text">
-            <ul v-for="item in debate.contruth" v-bind:key="item.uuid">
-              <i v-show="item.createdById == userIdLogged" class="fa fa-pencil" aria-hidden="true" style="margin-right:10px; cursor: pointer;" @click="edit('against', item)"></i>
-              <a @click="goClaim(item)" v-if="item.title != ''" style="font-size: 18px;">{{item.title}} -
-                <span v-if="item.claim != undefined" style="color:#000; font-size: 13px;">Truth: {{item.claim.truth}}</span>
-              </a>
-              <a @click="goClaim(item)" v-else style="font-size: 18px;">{{item.claim.title}} -
-                <span v-if="item.claim != undefined" style="color:#000; font-size: 13px;">Truth: {{item.claim.truth}}</span>
-              </a>
-              <ul style="list-style: none; margin-left: 25px;">
-                <li v-if="item.desc != ''">{{item.desc}}</li>
-                <li v-else>{{item.claim.desc}}</li>
-                <li v-if="item.claim != undefined"></li>
-              </ul>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -235,13 +140,13 @@ export default {
     argumentFavor() {
       this.argFavor = {};
       this.formAgainst = false;
-      this.formFavor = true;
+      this.formFavor = !this.formFavor;
     },
 
     argumentAgainst() {
       this.argAgainst = {};
       this.formFavor = false;
-      this.formAgainst = true;
+      this.formAgainst = !this.formAgainst;
     },
 
     edit(type, item) {
@@ -388,7 +293,7 @@ export default {
 
   .claim-content {
     background-color: #fff;
-    height: 145px;
+    height: auto;
     border: 1px solid #e6e9eb;
     cursor: pointer;
   }
@@ -553,5 +458,11 @@ export default {
     border-radius: 4px;
     color: #a9b0b8;
     font-weight: 800;
+  }
+
+  @media (max-width: 768px) {
+    .claim-arguments > div {
+      padding: 16px 0px 1px 0px;
+    }
   }
 </style>

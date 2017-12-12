@@ -21,8 +21,36 @@
               </div>
             </v-card-title>
             <v-card-actions style="border-top: 1px solid rgba(0,0,0,.1); height: 46px;">
-              <v-btn flat color="orange" @click="gruff(item.uuid)">Gruff It</v-btn>
-              <v-btn flat color="orange">Share</v-btn>
+              <v-flex xs6>
+                <v-btn flat color="orange" @click="gruff(item.uuid)">Gruff It</v-btn>
+              </v-flex>
+              <v-flex xs6 text-xs-right>
+                <social-sharing v-bind:url="item.url"
+                    v-bind:title="item.title"
+                    v-bind:description="item.desc"
+                    inline-template>
+                  <div>
+                    <network network="facebook">
+                      <i class="fa fa-facebook" style="font-size: 22px;
+                        padding: 5px 11px;
+                        background-color: #3b5998;
+                        border-radius: 4px;
+                        color: #fff;
+                        cursor: pointer;">
+                      </i>
+                    </network>
+                    <network network="twitter">
+                      <i class="fa fa-twitter" style="font-size: 22px;
+                        padding: 5px 7px;
+                        background-color: #1DA1F2;
+                        border-radius: 4px;
+                        color: #fff;
+                        cursor: pointer;">
+                      </i>
+                    </network>
+                  </div>
+                </social-sharing>
+              </v-flex>
             </v-card-actions>
           </v-card>
         </div>
@@ -35,7 +63,7 @@
 import axios from 'axios';
 import router from '../router';
 
-/* eslint-disable no-undef */
+/* eslint-disable no-undef, no-param-reassign */
 const API_URL = API;
 
 export default {
@@ -66,6 +94,9 @@ export default {
     list() {
       const tagId = this.$route.params.id;
       axios.get(`${API_URL}/tags/${tagId}/claims`).then((response) => {
+        response.data.forEach((item) => {
+          item.url = `https://gruff.org/gruff/${item.uuid}`;
+        });
         this.claims = response.data;
       });
     },
