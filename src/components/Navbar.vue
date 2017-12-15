@@ -100,7 +100,7 @@
         <v-divider v-if="!user.authenticated" class="line"></v-divider>
         <v-list-tile v-if="!user.authenticated">
           <v-list-tile-title>
-            <router-link to="/login">Sign up</router-link>
+            <router-link to="/signup">Sign up</router-link>
           </v-list-tile-title>
         </v-list-tile>
       </v-list>

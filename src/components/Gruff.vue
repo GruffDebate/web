@@ -12,7 +12,7 @@
     <div class="col-xs-12 claim-arguments">
       <div class="col-xs-6">
         <div class="col-xs-6 col-sm-6 col-md-10 col-lg-10">
-          <p class="argument-favor">Favor</p>
+          <p class="argument-favor">For</p>
         </div>
         <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
           <i class="fa fa-plus-square argument-favor-icon" aria-hidden="true" @click="argumentFavor()"></i>
@@ -37,6 +37,13 @@
             {{favorError}}
           </div>
           <div class="form-group">
+            <select class="form-control input-favor" placeholder="Argument type" v-model="argFavor.target">
+              <!-- <option disabled value="">Choose one</option> -->
+              <option disabled value="1">Target Claim</option>
+              <!-- <option>Target Argument</option> -->
+            </select>
+          </div>
+          <div class="form-group">
             <input type="text" class="form-control input-favor" placeholder="Argument title" v-model="argFavor.title">
           </div>
           <div class="form-group">
@@ -51,9 +58,15 @@
         </div>
 
         <!-- LIST ARGUMENTS FAVOR -->
-        <div class="col-xs-12 space-10 block-favor block-favor-list" v-for="item in debate.protruth" v-bind:key="item.uuid" @click="goClaim(item)">
-          <h4 style="font-weight: 400;">{{item.title}}</h4>
-          <!-- <span>{{item.desc}}</span> -->
+        <div class="col-xs-12" v-for="item in debate.protruth" v-bind:key="item.id">
+          <h2 v-if="item.args.length > 0" style="font-weight: 300; text-transform: uppercase;">{{item.name}}</h2>
+
+          <div class="col-xs-12 space-10 block-favor block-favor-list" v-for="children in item.args" v-bind:key="children.uuid" @click="goClaim(children)">
+            <label style="color: #41cc90;">Strength:
+              <span style="color: #333; font-size: 12px;">{{children.strength}}</span>
+            </label>
+            <h4 style="font-weight: 400;">{{children.title}}</h4>
+          </div>
         </div>
       </div>
       <div class="col-xs-6 reset-col" style="padding-left: 5px;">
@@ -61,6 +74,13 @@
         <div class="col-xs-12 space-10 left block-against outline" v-if="formAgainst">
           <div v-if="isError2" class="alert alert-danger" role="alert">
             {{againstError}}
+          </div>
+          <div class="form-group">
+            <select class="form-control input-favor" placeholder="Argument type" v-model="argAgainst.target">
+              <!-- <option disabled value="">Choose one</option> -->
+              <option disabled value="1">Target Claim</option>
+              <!-- <option>Target Argument</option> -->
+            </select>
           </div>
           <div class="form-group">
             <input type="text" class="form-control input-against" placeholder="Argument title" v-model="argAgainst.title">
@@ -77,9 +97,16 @@
         </div>
 
         <!-- LIST ARGUMENTS AGAINST -->
-        <div class="col-xs-12 space-10 block-against block-against-list" v-for="item in debate.contruth" v-bind:key="item.uuid" @click="goClaim(item)">
-          <h4 style="font-weight: 400;">{{item.title}}</h4>
-          <!-- <span>{{item.desc}}</span> -->
+
+        <div class="col-xs-12" v-for="item in debate.contruth" v-bind:key="item.id">
+          <h2 v-if="item.args.length > 0" style="font-weight: 300; text-transform: uppercase;">{{item.name}}</h2>
+
+          <div class="col-xs-12 space-10 block-against block-against-list" v-for="children in item.args" v-bind:key="children.uuid" @click="goClaim(children)">
+            <label style="color: #ff725c;">Strength:
+              <span style="color: #333; font-size: 12px;">{{children.strength}}</span>
+            </label>
+            <h4 style="font-weight: 400;">{{children.title}}</h4>
+          </div>
         </div>
       </div>
     </div>
@@ -91,7 +118,7 @@ import axios from 'axios';
 import auth from '../auth';
 import router from '../router';
 
-/* eslint-disable no-undef */
+/* eslint-disable no-undef, no-param-reassign */
 const API_URL = API;
 
 export default {
@@ -102,8 +129,12 @@ export default {
       formAgainst: false,
       isError1: false,
       isError2: false,
-      argFavor: {},
-      argAgainst: {},
+      argFavor: {
+        target: '1',
+      },
+      argAgainst: {
+        target: '1',
+      },
       userIdLogged: 0,
     };
   },
@@ -118,6 +149,58 @@ export default {
   },
 
   methods: {
+    groupBy(args) {
+      const newArguments = [];
+      const argsVeryWeak = [];
+      const argsWeak = [];
+      const argsModerate = [];
+      const argsStrong = [];
+      const argsVeryStrong = [];
+      for (let i = 0; i < args.length; i += 1) {
+        if (args[i].strength >= 0 && args[i].strength < 1) {
+          argsVeryWeak.push(args[i]);
+        } else if (args[i].strength >= 1 && args[i].strength < 2) {
+          argsWeak.push(args[i]);
+        } else if (args[i].strength >= 2 && args[i].strength < 3) {
+          argsModerate.push(args[i]);
+        } else if (args[i].strength >= 3 && args[i].strength < 4) {
+          argsStrong.push(args[i]);
+        } else if (args[i].strength >= 4 && args[i].strength < 5) {
+          argsVeryStrong.push(args[i]);
+        }
+      }
+
+      newArguments.push(
+        {
+          id: 1,
+          name: 'Very Strong',
+          args: argsVeryStrong,
+        },
+        {
+          id: 2,
+          name: 'Strong',
+          args: argsStrong,
+        },
+        {
+          id: 3,
+          name: 'Moderate',
+          args: argsModerate,
+        },
+        {
+          id: 4,
+          name: 'Weak',
+          args: argsWeak,
+        },
+        {
+          id: 5,
+          name: 'Very Weak',
+          args: argsVeryWeak,
+        },
+      );
+
+      return newArguments;
+    },
+
     list() {
       axios.get(`${API_URL}/claims/${this.$route.params.id}`).then((response) => {
         const debate = response.data;
@@ -125,12 +208,14 @@ export default {
           for (let i = 0; i < debate.protruth.length; i += 1) {
             debate.protruth[i].isShow = false;
           }
+          debate.protruth = this.groupBy(debate.protruth);
         }
 
         if (debate.contruth !== undefined) {
           for (let i = 0; i < debate.contruth.length; i += 1) {
             debate.contruth[i].isShow = false;
           }
+          debate.contruth = this.groupBy(debate.contruth);
         }
 
         this.debate = debate;
@@ -138,13 +223,17 @@ export default {
     },
 
     argumentFavor() {
-      this.argFavor = {};
+      this.argFavor = {
+        target: '1',
+      };
       this.formAgainst = false;
       this.formFavor = !this.formFavor;
     },
 
     argumentAgainst() {
-      this.argAgainst = {};
+      this.argAgainst = {
+        target: '1',
+      };
       this.formFavor = false;
       this.formAgainst = !this.formAgainst;
     },
