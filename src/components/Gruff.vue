@@ -37,13 +37,6 @@
             {{favorError}}
           </div>
           <div class="form-group">
-            <select class="form-control input-favor" placeholder="Argument type" v-model="argFavor.target">
-              <!-- <option disabled value="">Choose one</option> -->
-              <option disabled value="1">Target Claim</option>
-              <!-- <option>Target Argument</option> -->
-            </select>
-          </div>
-          <div class="form-group">
             <input type="text" class="form-control input-favor" placeholder="Argument title" v-model="argFavor.title">
           </div>
           <div class="form-group">
@@ -58,14 +51,68 @@
         </div>
 
         <!-- LIST ARGUMENTS FAVOR -->
-        <div class="col-xs-12" v-for="item in debate.protruth" v-bind:key="item.id">
+        <div class="col-xs-12 reset-col" v-for="item in debate.protruth" v-bind:key="item.id">
           <h2 v-if="item.args.length > 0" style="font-weight: 300; text-transform: uppercase;">{{item.name}}</h2>
 
-          <div class="col-xs-12 space-10 block-favor block-favor-list" v-for="children in item.args" v-bind:key="children.uuid" @click="goClaim(children)">
-            <label style="color: #41cc90;">Strength:
-              <span style="color: #333; font-size: 12px;">{{children.strength}}</span>
-            </label>
-            <h4 style="font-weight: 400;">{{children.title}}</h4>
+          <!-- todo: @click="goClaim(children)" -->
+          <div v-for="children in item.args" v-bind:key="children.uuid" class="block-shadow space-10">
+            <div class="block-favor block-favor-list" @click="openTab(children)">
+              <label style="color: #41cc90;">Strength:
+                <span style="color: #333; font-size: 12px;">{{children.strength}}</span>
+              </label>
+              <h4 style="font-weight: 400;">{{children.title}}</h4>
+            </div>
+            <v-tabs grow icons v-if="children.tab">
+              <v-tabs-bar class="grey lighten-4">
+                <v-tabs-slider class="tab-slider-favor"></v-tabs-slider>
+                <v-tabs-item href="#tab-1">
+                  <v-icon>gavel</v-icon>
+                  <span class="hidden-sm-and-down">Arguments</span>
+                </v-tabs-item>
+                <v-tabs-item href="#tab-2">
+                  <v-icon>library_books</v-icon>
+                  <span class="hidden-sm-and-down">Contexts</span>
+                </v-tabs-item>
+                <v-tabs-item href="#tab-3">
+                  <v-icon>create</v-icon>
+                  <span class="hidden-sm-and-down">New</span>
+                </v-tabs-item>
+                <v-tabs-item @click="goClaim(children)">
+                  <v-icon>call_missed_outgoing</v-icon>
+                  <span class="hidden-sm-and-down">See Claim</span>
+                </v-tabs-item>
+              </v-tabs-bar>
+              <v-tabs-items class="tab-heigth">
+                <v-tabs-content :key="1" :id="'tab-1'">
+                  <div class="col-xs-12" v-if="children.args == undefined">
+                    <h3 class="text-xs-center" style="margin-top: 37px;">This argument has no Argument</h3>
+                  </div>
+                </v-tabs-content>
+                <v-tabs-content :key="2" :id="'tab-2'">
+                  <div class="col-xs-12" style="border-top: 1px solid #ccc; padding-top: 8px;" flat v-for="context in children.claim.contexts" v-bind:key="context.id">
+                    <a @click="goToContext(context)">{{context.title}}</a>
+                    <p>{{context.desc}}</p>
+                  </div>
+                  <div class="col-xs-12" v-if="children.claim.contexts == undefined">
+                    <h3 class="text-xs-center" style="margin-top: 37px;">This argument has no Context</h3>
+                  </div>
+                </v-tabs-content>
+                <v-tabs-content :key="3" :id="'tab-3'">
+                  <div class="col-xs-12" style="padding-top: 10px;">
+                    <h4>Create a new Argument</h4>
+                    <div class="form-group">
+                      <input type="text" class="form-control input-favor" placeholder="Argument title" v-model="argFavor.title">
+                    </div>
+                    <div class="form-group">
+                      <textarea type="text" class="form-control input-favor" placeholder="Argument description" v-model="argFavor.desc" rows="4"></textarea>
+                    </div>
+                    <v-btn  outline color="primary" slot="activator" class="blue btn-send-favor-it" :disabled="argFavor.title == undefined || argFavor.title == null || argFavor.title == ''">
+                      Send it
+                    </v-btn>
+                  </div>
+                </v-tabs-content>
+              </v-tabs-items>
+            </v-tabs>
           </div>
         </div>
       </div>
@@ -74,13 +121,6 @@
         <div class="col-xs-12 space-10 left block-against outline" v-if="formAgainst">
           <div v-if="isError2" class="alert alert-danger" role="alert">
             {{againstError}}
-          </div>
-          <div class="form-group">
-            <select class="form-control input-favor" placeholder="Argument type" v-model="argAgainst.target">
-              <!-- <option disabled value="">Choose one</option> -->
-              <option disabled value="1">Target Claim</option>
-              <!-- <option>Target Argument</option> -->
-            </select>
           </div>
           <div class="form-group">
             <input type="text" class="form-control input-against" placeholder="Argument title" v-model="argAgainst.title">
@@ -97,16 +137,69 @@
         </div>
 
         <!-- LIST ARGUMENTS AGAINST -->
-
-        <div class="col-xs-12" v-for="item in debate.contruth" v-bind:key="item.id">
+        <div class="col-xs-12 reset-col" v-for="item in debate.contruth" v-bind:key="item.id">
           <h2 v-if="item.args.length > 0" style="font-weight: 300; text-transform: uppercase;">{{item.name}}</h2>
 
-          <div class="col-xs-12 space-10 block-against block-against-list" v-for="children in item.args" v-bind:key="children.uuid" @click="goClaim(children)">
-            <label style="color: #ff725c;">Strength:
-              <span style="color: #333; font-size: 12px;">{{children.strength}}</span>
-            </label>
-            <h4 style="font-weight: 400;">{{children.title}}</h4>
+          <div v-for="children in item.args" v-bind:key="children.uuid" class="block-shadow space-10">
+            <div class="block-against block-against-list" @click="openTab(children)">
+              <label style="color: #ff725c;">Strength:
+                <span style="color: #333; font-size: 12px;">{{children.strength}}</span>
+              </label>
+              <h4 style="font-weight: 400;">{{children.title}}</h4>
+            </div>
+            <v-tabs grow icons v-if="children.tab">
+              <v-tabs-bar class="grey lighten-4">
+                <v-tabs-slider class="tab-slider-against"></v-tabs-slider>
+                <v-tabs-item href="#tab-1">
+                  <v-icon>gavel</v-icon>
+                  <span class="hidden-sm-and-down">Arguments</span>
+                </v-tabs-item>
+                <v-tabs-item href="#tab-2">
+                  <v-icon>library_books</v-icon>
+                  <span class="hidden-sm-and-down">Contexts</span>
+                </v-tabs-item>
+                <v-tabs-item href="#tab-3">
+                  <v-icon>create</v-icon>
+                  <span class="hidden-sm-and-down">New</span>
+                </v-tabs-item>
+                <v-tabs-item @click="goClaim(children)">
+                  <v-icon>call_missed_outgoing</v-icon>
+                  <span class="hidden-sm-and-down">See Claim</span>
+                </v-tabs-item>
+              </v-tabs-bar>
+              <v-tabs-items class="tab-heigth">
+                <v-tabs-content :key="1" :id="'tab-1'">
+                  <div class="col-xs-12" v-if="children.args == undefined">
+                    <h3 class="text-xs-center" style="margin-top: 37px;">This argument has no Argument</h3>
+                  </div>
+                </v-tabs-content>
+                <v-tabs-content :key="2" :id="'tab-2'">
+                  <div class="col-xs-12" style="border-top: 1px solid #ccc; padding-top: 8px;" flat v-for="context in children.claim.contexts" v-bind:key="context.id">
+                    <a @click="goToContext(context)">{{context.title}}</a>
+                    <p>{{context.desc}}</p>
+                  </div>
+                  <div class="col-xs-12" v-if="children.claim.contexts == undefined">
+                    <h3 class="text-xs-center" style="margin-top: 37px;">This argument has no Context</h3>
+                  </div>
+                </v-tabs-content>
+                <v-tabs-content :key="3" :id="'tab-3'">
+                  <div class="col-xs-12" style="padding-top: 10px;">
+                    <h4>Create a new Argument</h4>
+                    <div class="form-group">
+                      <input type="text" class="form-control input-against" placeholder="Argument title" v-model="argFavor.title">
+                    </div>
+                    <div class="form-group">
+                      <textarea type="text" class="form-control input-against" placeholder="Argument description" v-model="argFavor.desc" rows="4"></textarea>
+                    </div>
+                    <v-btn outline color="primary" slot="activator" class="blue btn-send-against-it" :disabled="argFavor.title == undefined || argFavor.title == null || argFavor.title == ''">
+                      Send it
+                    </v-btn>
+                  </div>
+                </v-tabs-content>
+              </v-tabs-items>
+            </v-tabs>
           </div>
+
         </div>
       </div>
     </div>
@@ -129,12 +222,8 @@ export default {
       formAgainst: false,
       isError1: false,
       isError2: false,
-      argFavor: {
-        target: '1',
-      },
-      argAgainst: {
-        target: '1',
-      },
+      argFavor: {},
+      argAgainst: {},
       userIdLogged: 0,
     };
   },
@@ -157,6 +246,7 @@ export default {
       const argsStrong = [];
       const argsVeryStrong = [];
       for (let i = 0; i < args.length; i += 1) {
+        args[i].tab = false;
         if (args[i].strength >= 0 && args[i].strength < 1) {
           argsVeryWeak.push(args[i]);
         } else if (args[i].strength >= 1 && args[i].strength < 2) {
@@ -223,17 +313,13 @@ export default {
     },
 
     argumentFavor() {
-      this.argFavor = {
-        target: '1',
-      };
+      this.argFavor = {};
       this.formAgainst = false;
       this.formFavor = !this.formFavor;
     },
 
     argumentAgainst() {
-      this.argAgainst = {
-        target: '1',
-      };
+      this.argAgainst = {};
       this.formFavor = false;
       this.formAgainst = !this.formAgainst;
     },
@@ -355,6 +441,18 @@ export default {
       }
     },
 
+    openTab(item) {
+      item.tab = !item.tab;
+      // if (!item.tab) return;
+
+      // axios.get(`${API_URL}/arguments/${item.uuid}`).then((response) => {
+      //   // const argument = response.data;
+      //   // this.$set(item, 'args', argument);
+      //   console.log(response.data);
+      //   // item.args = argument;
+      // });
+    },
+
     cancel() {
       this.formAgainst = false;
       this.formFavor = false;
@@ -362,6 +460,10 @@ export default {
 
     goClaim(item) {
       router.push(`/gruff/${item.claimId}`);
+    },
+
+    goToContext() {
+      router.push('/context');
     },
 
     goTags(item) {
@@ -480,6 +582,12 @@ export default {
     margin-top: 40px;
   }
 
+  .block-shadow {
+    background-color: #fff;
+    box-shadow: 0 1px 1px -3px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 1px 0 rgba(0,0,0,.12);
+    transition: width .2s linear,margin-left .2s linear;
+  }
+
   .block-favor {
     background-color: #fff;
     padding: 20px;
@@ -553,5 +661,21 @@ export default {
     .claim-arguments > div {
       padding: 16px 0px 1px 0px;
     }
+  }
+
+  .tab-slider-favor {
+    background-color: #41cc90 !important;
+    border-color: #41cc90 !important;
+  }
+
+  .tab-slider-against {
+    background-color: #ff725c !important;
+    border-color: #ff725c !important;
+  }
+
+  .tab-heigth {
+    max-height: 270px;
+    min-height: 100px;
+    overflow-y: auto;
   }
 </style>

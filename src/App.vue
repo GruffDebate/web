@@ -205,11 +205,24 @@ export default {
   margin: 7px 1px 0 3px;
 }
 
-a:hover {
+a:hover, a:focus {
   text-decoration: none;
 }
 
 .btn {
   margin: 6px 0px !important;
+}
+
+.tabs--icons .tabs__bar {
+  height: 58px !important;
+}
+
+.tabs__wrapper > ul {
+  margin: 0;
+}
+
+.tabs__item .icon {
+  margin: 0 !important;
+  font-size: 20px !important;
 }
 </style>
