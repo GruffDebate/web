@@ -37,6 +37,25 @@
             {{favorError}}
           </div>
           <div class="form-group">
+            <select class="form-control input-favor" v-model="argFavor.opt">
+              <option value="" disabled>Select an option</option>
+              <option value="1">Create argument with new claim</option>
+              <option value="2">Create argument with an existing claim</option>
+            </select>
+          </div>
+          <div class="form-group" v-if="argFavor.opt == '2'">
+            <v-select
+              :debounce="250"
+              :on-search="getOptionsClaim"
+              :options="optionsClaim"
+              placeholder="Search Claim..."
+              label="title"
+              class="select-back"
+              v-model="argFavor.targetClaim"
+            >
+            </v-select>
+          </div>
+          <div class="form-group">
             <input type="text" class="form-control input-favor" placeholder="Argument title" v-model="argFavor.title">
           </div>
           <div class="form-group">
@@ -167,6 +186,25 @@
         <div class="col-xs-12 space-10 left block-against outline" v-if="formAgainst">
           <div v-if="isError2" class="alert alert-danger" role="alert">
             {{againstError}}
+          </div>
+          <div class="form-group">
+            <select class="form-control input-favor" v-model="argAgainst.opt">
+              <option value="" disabled>Select an option</option>
+              <option value="1">Create argument with new claim</option>
+              <option value="2">Create argument with an existing claim</option>
+            </select>
+          </div>
+          <div class="form-group" v-if="argAgainst.opt == '2'">
+            <v-select
+              :debounce="250"
+              :on-search="getOptionsClaim"
+              :options="optionsClaim"
+              placeholder="Search Claim..."
+              label="title"
+              class="select-back"
+              v-model="argAgainst.targetClaim"
+            >
+            </v-select>
           </div>
           <div class="form-group">
             <input type="text" class="form-control input-against" placeholder="Argument title" v-model="argAgainst.title">
@@ -320,6 +358,7 @@ export default {
       isErrorArgumentCon: false,
       isErrorArgumentPro: false,
       userIdLogged: 0,
+      optionsClaim: [],
     };
   },
 
@@ -407,6 +446,12 @@ export default {
       });
     },
 
+    getOptionsClaim() {
+      axios.get(`${API_URL}/claims`).then((response) => {
+        this.optionsClaim = response.data;
+      });
+    },
+
     argumentFavor() {
       this.argFavor = {};
       this.formAgainst = false;
@@ -453,7 +498,8 @@ export default {
 
     saveFavor() {
       const model = {
-        targetClaimID: this.$route.params.id,
+        targetClaimID: this.argFavor.targetClaim === undefined ?
+          this.$route.params.id : this.argFavor.targetClaim.uuid,
         type: 1,
         claim: {
           title: this.argFavor.title,
@@ -494,7 +540,8 @@ export default {
 
     saveAgainst() {
       const model = {
-        targetClaimID: this.$route.params.id,
+        targetClaimID: this.argAgainst.targetClaim === undefined ?
+          this.$route.params.id : this.argAgainst.targetClaim.uuid,
         type: 2,
         claim: {
           title: this.argAgainst.title,

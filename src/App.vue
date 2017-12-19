@@ -203,6 +203,8 @@ export default {
 
 .v-select .selected-tag{
   margin: 7px 1px 0 3px;
+  overflow: hidden !important;
+  width: 95%;
 }
 
 a:hover, a:focus {
