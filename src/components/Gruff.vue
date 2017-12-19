@@ -83,7 +83,8 @@
               <label style="color: #41cc90;">Truth:
                 <span style="color: #333; font-size: 12px;">{{children.claim.truth}}</span>
               </label>
-              <h4 style="font-weight: 400;">{{children.title}}</h4>
+              <h4 style="font-weight: 400;" v-if="children.title != ''">{{children.title}}</h4>
+              <h4 style="font-weight: 400;" v-else>{{children.claim.title}}</h4>
             </div>
             <v-tabs grow icons v-if="children.tab">
               <v-tabs-bar class="grey lighten-4">
@@ -233,7 +234,8 @@
               <label style="color: #ff725c;">Truth:
                 <span style="color: #333; font-size: 12px;">{{children.claim.truth}}</span>
               </label>
-              <h4 style="font-weight: 400;">{{children.title}}</h4>
+              <h4 style="font-weight: 400;" v-if="children.title != ''">{{children.title}}</h4>
+              <h4 style="font-weight: 400;" v-else>{{children.claim.title}}</h4>
             </div>
             <v-tabs grow icons v-if="children.tab">
               <v-tabs-bar class="grey lighten-4">
@@ -336,7 +338,6 @@
 
 <script>
 import axios from 'axios';
-// import _ from 'lodash';
 import auth from '../auth';
 import router from '../router';
 
@@ -506,14 +507,18 @@ export default {
 
     saveFavor() {
       const model = {
-        targetClaimID: this.argFavor.targetClaim === undefined ?
-          this.$route.params.id : this.argFavor.targetClaim.uuid,
+        targetClaimID: this.$route.params.id,
         type: 1,
         claim: {
           title: this.argFavor.title,
           desc: this.argFavor.desc,
         },
       };
+
+      if (this.argFavor.targetClaim !== undefined) {
+        model.claimId = this.argFavor.targetClaim.uuid;
+        model.claim.uuid = this.argFavor.targetClaim.uuid;
+      }
 
       if (this.argFavor.uuid === undefined) {
         axios.post(`${API_URL}/arguments`, model).then(() => {
@@ -548,14 +553,18 @@ export default {
 
     saveAgainst() {
       const model = {
-        targetClaimID: this.argAgainst.targetClaim === undefined ?
-          this.$route.params.id : this.argAgainst.targetClaim.uuid,
+        targetClaimID: this.$route.params.id,
         type: 2,
         claim: {
           title: this.argAgainst.title,
           desc: this.argAgainst.desc,
         },
       };
+
+      if (this.argAgainst.targetClaim !== undefined) {
+        model.claimId = this.argAgainst.targetClaim.uuid;
+        model.claim.uuid = this.argAgainst.targetClaim.uuid;
+      }
 
       if (this.argAgainst.uuid === undefined) {
         axios.post(`${API_URL}/arguments`, model).then(() => {
