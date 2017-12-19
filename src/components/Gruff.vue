@@ -351,8 +351,12 @@ export default {
       formAgainst: false,
       isError1: false,
       isError2: false,
-      argFavor: {},
-      argAgainst: {},
+      argFavor: {
+        opt: '1',
+      },
+      argAgainst: {
+        opt: '1',
+      },
       argPro: {},
       argCon: {},
       isErrorArgumentCon: false,
@@ -453,13 +457,17 @@ export default {
     },
 
     argumentFavor() {
-      this.argFavor = {};
+      this.argFavor = {
+        opt: '1',
+      };
       this.formAgainst = false;
       this.formFavor = !this.formFavor;
     },
 
     argumentAgainst() {
-      this.argAgainst = {};
+      this.argAgainst = {
+        opt: '1',
+      };
       this.formFavor = false;
       this.formAgainst = !this.formAgainst;
     },
