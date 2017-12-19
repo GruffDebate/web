@@ -25,7 +25,6 @@
                 <v-icon dark>account_circle</v-icon>
               </v-avatar>
               <label>{{item.createdBy.username}}</label>
-              <!-- <v-btn flat color="orange" @click="gruff(item.uuid)">Gruff It</v-btn> -->
             </v-flex>
             <v-flex xs6 text-xs-right>
               <social-sharing v-bind:url="item.url"
