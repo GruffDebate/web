@@ -51,7 +51,7 @@
         </div>
 
         <!-- LIST ARGUMENTS FAVOR -->
-        <div class="col-xs-12 reset-col" v-for="item in debate.protruth" v-bind:key="item.id">
+        <div class="col-xs-12 reset-col" v-for="item in debate.pro" v-bind:key="item.id">
           <h2 v-if="item.args.length > 0" style="font-weight: 300; text-transform: uppercase;">{{item.name}}</h2>
 
           <!-- todo: @click="goClaim(children)" -->
@@ -137,7 +137,7 @@
         </div>
 
         <!-- LIST ARGUMENTS AGAINST -->
-        <div class="col-xs-12 reset-col" v-for="item in debate.contruth" v-bind:key="item.id">
+        <div class="col-xs-12 reset-col" v-for="item in debate.con" v-bind:key="item.id">
           <h2 v-if="item.args.length > 0" style="font-weight: 300; text-transform: uppercase;">{{item.name}}</h2>
 
           <div v-for="children in item.args" v-bind:key="children.uuid" class="block-shadow space-10">
@@ -294,18 +294,18 @@ export default {
     list() {
       axios.get(`${API_URL}/claims/${this.$route.params.id}`).then((response) => {
         const debate = response.data;
-        if (debate.protruth !== undefined) {
-          for (let i = 0; i < debate.protruth.length; i += 1) {
-            debate.protruth[i].isShow = false;
+        if (debate.pro !== undefined) {
+          for (let i = 0; i < debate.pro.length; i += 1) {
+            debate.pro[i].isShow = false;
           }
-          debate.protruth = this.groupBy(debate.protruth);
+          debate.pro = this.groupBy(debate.pro);
         }
 
-        if (debate.contruth !== undefined) {
-          for (let i = 0; i < debate.contruth.length; i += 1) {
-            debate.contruth[i].isShow = false;
+        if (debate.con !== undefined) {
+          for (let i = 0; i < debate.con.length; i += 1) {
+            debate.con[i].isShow = false;
           }
-          debate.contruth = this.groupBy(debate.contruth);
+          debate.con = this.groupBy(debate.con);
         }
 
         this.debate = debate;

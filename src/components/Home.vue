@@ -13,7 +13,7 @@
     <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 reset-col">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" v-for="item in claims" v-bind:key="item.uuid">
         <v-card height="300" class="thumbnail">
-          <v-card-title style="height: 247px;">
+          <v-card-title style="height: 247px;" @click="gruff(item.uuid)">
             <div>
               <h4>{{item.title}}</h4><br>
               <span class="limit-text">{{item.desc}}</span>
@@ -21,7 +21,11 @@
           </v-card-title>
           <v-card-actions style="border-top: 1px solid rgba(0,0,0,.1); height: 46px;">
             <v-flex xs6>
-              <v-btn flat color="orange" @click="gruff(item.uuid)">Gruff It</v-btn>
+              <v-avatar class="indigo" size="32px">
+                <v-icon dark>account_circle</v-icon>
+              </v-avatar>
+              <label>{{item.createdBy.username}}</label>
+              <!-- <v-btn flat color="orange" @click="gruff(item.uuid)">Gruff It</v-btn> -->
             </v-flex>
             <v-flex xs6 text-xs-right>
               <social-sharing v-bind:url="item.url"
@@ -151,6 +155,11 @@ export default {
   .thumbnail {
     background-color: #fff;
     border-bottom: 1px solid #f1f3f4;
+    cursor: pointer;
+  }
+
+  .thumbnail:hover {
+    border: 1px solid #f1f3f4;
   }
 
   .card__title {
