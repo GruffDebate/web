@@ -56,9 +56,13 @@
 
           <!-- todo: @click="goClaim(children)" -->
           <div v-for="children in item.args" v-bind:key="children.uuid" class="block-shadow space-10">
-            <div class="block-favor block-favor-list" @click="openTab(children)">
+            <div class="block-favor block-favor-list" @click="openTab(children, false)">
               <label style="color: #41cc90;">Strength:
                 <span style="color: #333; font-size: 12px;">{{children.strength}}</span>
+              </label>
+              <span> | </span>
+              <label style="color: #41cc90;">Truth:
+                <span style="color: #333; font-size: 12px;">{{children.claim.truth}}</span>
               </label>
               <h4 style="font-weight: 400;">{{children.title}}</h4>
             </div>
@@ -84,13 +88,43 @@
               </v-tabs-bar>
               <v-tabs-items class="tab-heigth">
                 <v-tabs-content :key="1" :id="'tab-1'">
-                  <div class="col-xs-12" v-if="children.args == undefined">
+                  <div v-if="children.args != null">
+                    <div class="col-xs-6" style="padding-top: 8px;">
+                      <h5>Arguments For</h5>
+                      <div class="col-xs-12 reset-col" style="border-bottom: 1px solid #eee;"
+                        v-for="arPro in children.args.pro" v-bind:key="arPro.uuid">
+                        <label style="color: #41cc90; font-size: 11px; margin-top: 8px; margin-bottom:0;">Strength:
+                          <span style="color: #333; font-size: 12px;">{{arPro.strength}}</span>
+                        </label>
+                        <span> | </span>
+                        <label style="color: #41cc90; font-size: 11px;">Truth:
+                          <span style="color: #333; font-size: 12px;">{{arPro.claim.truth}}</span>
+                        </label>
+                        <p style="margin-bottom: 5px;">{{arPro.title}}</p>
+                      </div>
+                    </div>
+                    <div class="col-xs-6" style="padding-top: 8px;">
+                      <h5>Arguments Against</h5>
+                      <div class="col-xs-12 reset-col" style="border-bottom: 1px solid #eee;"
+                        v-for="arCon in children.args.con" v-bind:key="arCon.uuid">
+                        <label style="color: #ff725c; font-size: 11px; margin-top: 8px; margin-bottom:0;">Strength:
+                          <span style="color: #333; font-size: 12px;">{{arCon.strength}}</span>
+                        </label>
+                        <span> | </span>
+                        <label style="color: #ff725c; font-size: 11px;">Truth:
+                          <span style="color: #333; font-size: 12px;">{{arCon.claim.truth}}</span>
+                        </label>
+                        <p style="margin-bottom: 5px;">{{arCon.title}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12" v-else>
                     <h3 class="text-xs-center" style="margin-top: 37px;">This argument has no Argument</h3>
                   </div>
                 </v-tabs-content>
                 <v-tabs-content :key="2" :id="'tab-2'">
                   <div class="col-xs-12" style="border-top: 1px solid #ccc; padding-top: 8px;" flat v-for="context in children.claim.contexts" v-bind:key="context.id">
-                    <a @click="goToContext(context)">{{context.title}}</a>
+                    <a v-bind:href="context.url" target="_blank">{{context.title}}</a>
                     <p>{{context.desc}}</p>
                   </div>
                   <div class="col-xs-12" v-if="children.claim.contexts == undefined">
@@ -99,16 +133,28 @@
                 </v-tabs-content>
                 <v-tabs-content :key="3" :id="'tab-3'">
                   <div class="col-xs-12" style="padding-top: 10px;">
-                    <h4>Create a new Argument</h4>
-                    <div class="form-group">
-                      <input type="text" class="form-control input-favor" placeholder="Argument title" v-model="argFavor.title">
+                    <div class="col-xs-12" style="padding-top: 10px;">
+                      <div v-if="isErrorArgumentPro" class="alert alert-danger" role="alert">
+                        {{agrProError}}
+                      </div>
+                      <h4>Create a new Argument</h4>
+                      <div class="form-group">
+                        <select class="form-control input-favor" v-model="argPro.type">
+                          <option value="" disabled>Select an option</option>
+                          <option value="1">For</option>
+                          <option value="2">Against</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <input type="text" class="form-control input-favor" placeholder="Argument title" v-model="argPro.title">
+                      </div>
+                      <div class="form-group">
+                        <textarea type="text" class="form-control input-favor" placeholder="Argument description" v-model="argPro.desc" rows="4"></textarea>
+                      </div>
+                      <v-btn @click="createArgumentPro(children)" outline color="primary" slot="activator" class="blue btn-send-favor-it" :disabled="argPro.title == undefined || argPro.title == null || argPro.title == ''">
+                        Send it
+                      </v-btn>
                     </div>
-                    <div class="form-group">
-                      <textarea type="text" class="form-control input-favor" placeholder="Argument description" v-model="argFavor.desc" rows="4"></textarea>
-                    </div>
-                    <v-btn  outline color="primary" slot="activator" class="blue btn-send-favor-it" :disabled="argFavor.title == undefined || argFavor.title == null || argFavor.title == ''">
-                      Send it
-                    </v-btn>
                   </div>
                 </v-tabs-content>
               </v-tabs-items>
@@ -141,9 +187,13 @@
           <h2 v-if="item.args.length > 0" style="font-weight: 300; text-transform: uppercase;">{{item.name}}</h2>
 
           <div v-for="children in item.args" v-bind:key="children.uuid" class="block-shadow space-10">
-            <div class="block-against block-against-list" @click="openTab(children)">
+            <div class="block-against block-against-list" @click="openTab(children, false)">
               <label style="color: #ff725c;">Strength:
                 <span style="color: #333; font-size: 12px;">{{children.strength}}</span>
+              </label>
+              <span> | </span>
+              <label style="color: #ff725c;">Truth:
+                <span style="color: #333; font-size: 12px;">{{children.claim.truth}}</span>
               </label>
               <h4 style="font-weight: 400;">{{children.title}}</h4>
             </div>
@@ -169,13 +219,43 @@
               </v-tabs-bar>
               <v-tabs-items class="tab-heigth">
                 <v-tabs-content :key="1" :id="'tab-1'">
-                  <div class="col-xs-12" v-if="children.args == undefined">
+                  <div v-if="children.args != null">
+                    <div class="col-xs-6" style="padding-top: 8px;">
+                      <h5>Arguments For</h5>
+                      <div class="col-xs-12 reset-col" style="border-bottom: 1px solid #eee;"
+                        v-for="arPro in children.args.pro" v-bind:key="arPro.uuid">
+                        <label style="color: #41cc90; font-size: 11px; margin-top: 8px; margin-bottom:0;">Strength:
+                          <span style="color: #333; font-size: 12px;">{{arPro.strength}}</span>
+                        </label>
+                        <span> | </span>
+                        <label style="color: #41cc90; font-size: 11px;">Truth:
+                          <span style="color: #333; font-size: 12px;">{{arPro.claim.truth}}</span>
+                        </label>
+                        <p style="margin-bottom: 5px;">{{arPro.title}}</p>
+                      </div>
+                    </div>
+                    <div class="col-xs-6" style="padding-top: 8px;">
+                      <h5>Arguments Against</h5>
+                      <div class="col-xs-12 reset-col" style="border-bottom: 1px solid #eee;"
+                        v-for="arCon in children.args.con" v-bind:key="arCon.uuid">
+                        <label style="color: #ff725c; font-size: 11px; margin-top: 8px; margin-bottom:0;">Strength:
+                          <span style="color: #333; font-size: 12px;">{{arCon.strength}}</span>
+                        </label>
+                        <span> | </span>
+                        <label style="color: #ff725c; font-size: 11px;">Truth:
+                          <span style="color: #333; font-size: 12px;">{{arCon.claim.truth}}</span>
+                        </label>
+                        <p style="margin-bottom: 5px;">{{arCon.title}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12" v-else>
                     <h3 class="text-xs-center" style="margin-top: 37px;">This argument has no Argument</h3>
                   </div>
                 </v-tabs-content>
                 <v-tabs-content :key="2" :id="'tab-2'">
                   <div class="col-xs-12" style="border-top: 1px solid #ccc; padding-top: 8px;" flat v-for="context in children.claim.contexts" v-bind:key="context.id">
-                    <a @click="goToContext(context)">{{context.title}}</a>
+                    <a v-bind:href="context.url" target="_blank">{{context.title}}</a>
                     <p>{{context.desc}}</p>
                   </div>
                   <div class="col-xs-12" v-if="children.claim.contexts == undefined">
@@ -184,14 +264,24 @@
                 </v-tabs-content>
                 <v-tabs-content :key="3" :id="'tab-3'">
                   <div class="col-xs-12" style="padding-top: 10px;">
+                    <div v-if="isErrorArgumentCon" class="alert alert-danger" role="alert">
+                      {{agrConError}}
+                    </div>
                     <h4>Create a new Argument</h4>
                     <div class="form-group">
-                      <input type="text" class="form-control input-against" placeholder="Argument title" v-model="argFavor.title">
+                      <select class="form-control input-against" v-model="argCon.type">
+                        <option value="" disabled>Select an option</option>
+                        <option value="1">For</option>
+                        <option value="2">Against</option>
+                      </select>
                     </div>
                     <div class="form-group">
-                      <textarea type="text" class="form-control input-against" placeholder="Argument description" v-model="argFavor.desc" rows="4"></textarea>
+                      <input type="text" class="form-control input-against" placeholder="Argument title" v-model="argCon.title">
                     </div>
-                    <v-btn outline color="primary" slot="activator" class="blue btn-send-against-it" :disabled="argFavor.title == undefined || argFavor.title == null || argFavor.title == ''">
+                    <div class="form-group">
+                      <textarea type="text" class="form-control input-against" placeholder="Argument description" v-model="argCon.desc" rows="4"></textarea>
+                    </div>
+                    <v-btn @click="createArgumentCon(children)" outline color="primary" slot="activator" class="blue btn-send-against-it" :disabled="argCon.title == undefined || argCon.title == null || argCon.title == ''">
                       Send it
                     </v-btn>
                   </div>
@@ -208,6 +298,7 @@
 
 <script>
 import axios from 'axios';
+// import _ from 'lodash';
 import auth from '../auth';
 import router from '../router';
 
@@ -224,6 +315,10 @@ export default {
       isError2: false,
       argFavor: {},
       argAgainst: {},
+      argPro: {},
+      argCon: {},
+      isErrorArgumentCon: false,
+      isErrorArgumentPro: false,
       userIdLogged: 0,
     };
   },
@@ -441,16 +536,86 @@ export default {
       }
     },
 
-    openTab(item) {
-      item.tab = !item.tab;
-      // if (!item.tab) return;
+    createArgumentPro(item) {
+      const model = {
+        targetArgID: item.uuid,
+        type: parseInt(this.argPro.type, 10),
+        title: this.argPro.title,
+        desc: this.argPro.desc,
+      };
 
-      // axios.get(`${API_URL}/arguments/${item.uuid}`).then((response) => {
-      //   // const argument = response.data;
-      //   // this.$set(item, 'args', argument);
-      //   console.log(response.data);
-      //   // item.args = argument;
-      // });
+      axios.post(`${API_URL}/arguments`, model).then(() => {
+        this.argPro = {};
+        this.loadArgs(item.uuid, (result) => {
+          item.args = result;
+          // hack to force update
+          item.tab = !item.tab;
+          item.tab = !item.tab;
+        });
+      }, () => {
+        this.isErrorArgumentPro = true;
+        this.agrProError = 'You must be logged.';
+        setTimeout(() => {
+          this.isErrorArgumentPro = false;
+        }, 2000);
+      });
+    },
+
+    createArgumentCon(item) {
+      const model = {
+        targetArgID: item.uuid,
+        type: parseInt(this.argCon.type, 10),
+        title: this.argCon.title,
+        desc: this.argCon.desc,
+      };
+
+      axios.post(`${API_URL}/arguments`, model).then(() => {
+        this.argCon = {};
+        this.loadArgs(item.uuid, (result) => {
+          item.args = result;
+          // hack to force update
+          item.tab = !item.tab;
+          item.tab = !item.tab;
+        });
+      }, () => {
+        this.isErrorArgumentCon = true;
+        this.agrConError = 'You must be logged.';
+        setTimeout(() => {
+          this.isErrorArgumentCon = false;
+        }, 2000);
+      });
+    },
+
+    openTab(item, reload) {
+      if (item.tab && !reload) {
+        item.tab = !item.tab;
+        return;
+      }
+
+      this.loadArgs(item.uuid, (result) => {
+        item.args = result;
+
+        if (!reload) item.tab = !item.tab;
+      });
+    },
+
+    loadArgs(uuid, cb) {
+      axios.get(`${API_URL}/arguments/${uuid}`).then((response) => {
+        let argument = response.data;
+        if (typeof argument.pro === 'undefined') {
+          argument.pro = [];
+        }
+        if (typeof argument.con === 'undefined') {
+          argument.con = [];
+        }
+
+
+        if (argument.pro.length === 0 && argument.con.length === 0) {
+          argument = null;
+        }
+
+        cb(argument);
+      });
     },
 
     cancel() {
@@ -674,7 +839,7 @@ export default {
   }
 
   .tab-heigth {
-    max-height: 270px;
+    max-height: 330px;
     min-height: 100px;
     overflow-y: auto;
   }

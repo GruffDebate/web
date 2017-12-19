@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "lodash": "^4.17.4",
     "material-design-lite": "^1.2.1",
     "vue": "^2.1.9",
     "vue-router": "^2.1.1",
