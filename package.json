@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "chart.js": "^2.7.1",
     "lodash": "^4.17.4",
     "material-design-lite": "^1.2.1",
     "vue": "^2.1.9",
+    "vue-chartjs": "^3.0.2",
     "vue-router": "^2.1.1",
     "vue-select": "^2.3.0",
     "vue-social-sharing": "^2.3.3",

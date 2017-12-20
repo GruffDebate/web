@@ -85,6 +85,7 @@
               </label>
               <h4 style="font-weight: 400;" v-if="children.title != ''">{{children.title}}</h4>
               <h4 style="font-weight: 400;" v-else>{{children.claim.title}}</h4>
+              <span>{{children.desc}}</span>
             </div>
             <v-tabs grow icons v-if="children.tab">
               <v-tabs-bar class="grey lighten-4">
@@ -236,6 +237,7 @@
               </label>
               <h4 style="font-weight: 400;" v-if="children.title != ''">{{children.title}}</h4>
               <h4 style="font-weight: 400;" v-else>{{children.claim.title}}</h4>
+              <span>{{children.desc}}</span>
             </div>
             <v-tabs grow icons v-if="children.tab">
               <v-tabs-bar class="grey lighten-4">
@@ -513,6 +515,8 @@ export default {
           title: this.argFavor.title,
           desc: this.argFavor.desc,
         },
+        title: this.argFavor.title,
+        desc: this.argFavor.desc,
       };
 
       if (this.argFavor.targetClaim !== undefined) {
@@ -559,6 +563,8 @@ export default {
           title: this.argAgainst.title,
           desc: this.argAgainst.desc,
         },
+        title: this.argAgainst.title,
+        desc: this.argAgainst.desc,
       };
 
       if (this.argAgainst.targetClaim !== undefined) {
