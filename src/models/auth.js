@@ -25,7 +25,9 @@ const auth = {
       const response = await login(payload);
       action.updateAuth(response.data);
       action.updateIsAuthLoading({ loading: false });
-      if (isBrowser) navigate('/')
+      if (isBrowser) {
+        window.location.href = "/";
+      }
     } catch (error) {
       if (error.response) {
         action.updateIsAuthLoading({ loading: false });

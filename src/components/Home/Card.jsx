@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import { navigate } from "gatsby";
 
 const Card = props => {
-  const go = () => {
-
+  const go = (key) => {
+    navigate(`/c/${key}`)
   }
   
   return (
-    <Container onClick={go}>
+    <Container onClick={() => go(props.id)}>
       <CardShape>
         <CardPosition>
           <CardImage>

@@ -50,6 +50,7 @@ const Home = () => {
                   {popularClaims && popularClaims.map((item, idx) => (
                     <Card
                       key={idx}
+                      id={item.id}
                       title={item.title}
                       desc={item.desc}
                       img={item.img}
@@ -61,7 +62,9 @@ const Home = () => {
                   {newClaims && newClaims.map((item, idx) => (
                     <Card
                       key={idx}
+                      id={item.id}
                       title={item.title}
+                      desc={item.desc}
                       img={item.img}
                     />
                   ))}

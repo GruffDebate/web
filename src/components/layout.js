@@ -2,15 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import Navbar from "./navbar";
 
-import HomeIcon from "../assets/icons/home-page.svg";
-
 const Layout = ({ children }) => {
   const routes = [
     {
       path: "/",
       name: "Home",
       description: "Home",
-      icon: HomeIcon
+      private: false,
+    },
+    {
+      path: "/claims",
+      name: "Claim",
+      description: "Claim",
+      private: true,
     },
   ];
 

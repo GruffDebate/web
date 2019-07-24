@@ -1,7 +1,8 @@
 import React from "react";
 import get from "lodash/get";
-import { Link } from 'gatsby'
-import styled from "styled-components";
+import { Link, navigate } from 'gatsby'
+import styled, { css } from "styled-components";
+import { ifProp } from "styled-tools";
 import { useStore, useActions } from "../configureStore";
 import LogoIcon from "../assets/images/icon.png";
 import { auth as useAuth } from "../hooks/auth";
@@ -22,8 +23,8 @@ const Navbar = props => {
         </Header>
         <ContentLink>
           {props.routes.map((route, key) => (
-            <ContextBoxItem key={key} onClick={() => {
-              if (typeof window !== `undefined`) props.history.push(route.path)}
+            <ContextBoxItem isAuth={isAuth && route.private} private={route.private} key={key} onClick={() => {
+              if (typeof window !== `undefined`) navigate(route.path)}
             }>
               <ContextBoxItemLabel>
                 <span>{route.name}</span>
@@ -79,11 +80,21 @@ const ContentBox = styled.div`
 `
 
 const ContextBoxItem = styled.a`
-  display: flex;
   align-items: center;
+  margin-left: .8em;
   &:first-child {
     margin-left: 1.8em;
   }
+
+  ${ifProp(
+     { isAuth: true },
+    css`
+      display: flex;
+    `,
+    css`
+      display: ${props => props.private ? 'none' : 'flex' };
+    `
+  )}
 `
 
 const ContextBoxItemLabel = styled.div`
