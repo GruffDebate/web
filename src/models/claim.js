@@ -9,7 +9,7 @@ import {
 import { get } from "lodash";
 import { toaster } from "evergreen-ui";
 
-const unit = {
+const claim = {
   isLoading: false,
   isLoadingForm: false,
   isLoadingDelete: false,
@@ -90,6 +90,40 @@ const unit = {
     state.claims = payload.results || [];
   }),
   setClaim: action((state, payload) => {
+    payload.premise = [
+      {
+        id: 1,
+        title: 'Premise 1'
+      },
+      {
+        id: 2,
+        title: 'Premise 2'
+      },
+      {
+        id: 3,
+        title: 'Premise 3'
+      },
+      {
+        id: 4,
+        title: 'Premise 4'
+      },
+      {
+        id: 5,
+        title: 'Premise 5'
+      }
+    ]
+    payload.proargs = [
+      {
+        id: 1,
+        title: 'Bernie Sanders has a strong policy platform on issues which matter to American voters.'
+      }
+    ]
+    payload.conargs = [
+      {
+        id: 1,
+        title: 'If Sanders were to implement his policy platform, it could have harmful effects on the economy.'
+      }
+    ]
     state.claim = payload || {};
   }),
   setLoadingForm: action((state, payload) => {
@@ -115,4 +149,4 @@ const unit = {
   })
 };
 
-export default unit;
+export default claim;

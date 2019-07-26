@@ -38,7 +38,7 @@ api.interceptors.request.use(
             !window.location.pathname.includes("login") &&
             !window.location.pathname.includes("register")
           ) {
-            navigate("/");
+            // navigate("/");
           }
         }
       }
@@ -58,8 +58,7 @@ api.interceptors.response.use(
     if (error.response) {
       if (error.response.status === 401 || error.response.status === 403) {
         if (
-          !window.location.pathname.includes("login") &&
-          !window.location.pathname.includes("register")
+          window.location.pathname.includes("claims")
         ) {
           toaster.danger("Session expired", { duration: 5 });
           localStorage.removeItem("gruff_auth");
@@ -68,8 +67,7 @@ api.interceptors.response.use(
       }
     } else {
       if (
-        !window.location.pathname.includes("login") &&
-        !window.location.pathname.includes("register")
+        window.location.pathname.includes("claims")
       ) {
         localStorage.removeItem("gruff_auth");
         navigate("/");

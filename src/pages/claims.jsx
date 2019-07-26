@@ -19,7 +19,7 @@ import { useStore, useActions } from "../configureStore";
 import { theme } from "../theme";
 import Layout from '../components/layout'
 
-export default function Claim() {
+export default function Claims() {
   const isLoadingForm = useStore(state => state.claim.isLoadingForm);
   const isLoadingDelete = useStore(state => state.claim.isLoadingDelete);
   const isShow = useStore(state => state.claim.isShow);

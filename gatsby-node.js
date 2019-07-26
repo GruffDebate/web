@@ -1,8 +1,6 @@
 const crypto = require('crypto');
 const axios = require('axios');
 const path = require(`path`);
-const API_URI = `${process.env.GATSBY_API_URL}/api/`
-
 
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
   if (stage === "build-html") {
@@ -60,37 +58,45 @@ exports.sourceNodes = async ({ boundActionCreators }) => {
   }
 };
 
-exports.createPages = ({ graphql, boundActionCreators }) => {
-  const { createPage } = boundActionCreators
-  return new Promise((resolve, reject) => {
-    graphql(`
-      {
-        allClaim {
-          edges {
-            node {
-              id
-              title
-              desc
-              creator
-            }
-          }
-        }
-      }
-    `
-  ).then(result => {
-    result.data.allClaim.edges.forEach(({ node }) => {
-      createPage({
-        path: `c/${node.id}`,
-        component: path.resolve(`./src/pages/claim.jsx`),
-        context: {
-          id: node.id
-        },
-      })
-    });
-    resolve()
-  })
-  }).catch(error => {
-    console.log(error)
-    reject()
-  })
+exports.onCreatePage = async ({ page, boundActionCreators }) => {
+  const { createPage } = boundActionCreators;
+  if (page.path.match(/^\/c/)) {
+    page.matchPath = "/c/:path";
+    createPage(page);
+  }
 };
+
+// exports.createPages = ({ graphql, boundActionCreators }) => {
+//   const { createPage } = boundActionCreators
+//   return new Promise((resolve, reject) => {
+//     graphql(`
+//       {
+//         allClaim {
+//           edges {
+//             node {
+//               id
+//               title
+//               desc
+//               creator
+//             }
+//           }
+//         }
+//       }
+//     `
+//   ).then(result => {
+//     result.data.allClaim.edges.forEach(({ node }) => {
+//       createPage({
+//         path: `c/${node.id}`,
+//         component: path.resolve(`./src/pages/claim.jsx`),
+//         context: {
+//           id: node.id
+//         },
+//       })
+//     });
+//     resolve()
+//   })
+//   }).catch(error => {
+//     console.log(error)
+//     reject()
+//   })
+// };
