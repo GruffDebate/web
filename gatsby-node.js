@@ -28,33 +28,35 @@ exports.sourceNodes = async ({ boundActionCreators }) => {
     }
   });
 
-  for (const claim of result.data) {
-    await createNode({
-      children: [],
-      id: claim.id,
-      start: claim.start,
-      mod: claim.mod,
-      end: claim.end,
-      creator: claim.creator,
-      title: claim.title,
-      negation: claim.negation,
-      question: claim.question,
-      desc: claim.desc,
-      mp: claim.mp,
-      mprule: claim.mprule,
-      truth: claim.truth,
-      truthRU: claim.truthRU,
-      proargs: claim.proargs,
-      conargs: claim.conargs,
-      parent: null,
-      internal: {
-        type: 'Claim',
-        contentDigest: crypto
-          .createHash(`md5`)
-          .update(JSON.stringify(claim))
-          .digest(`hex`),
-      },
-    });
+  if (result.data) {
+    for (const claim of result.data) {
+      await createNode({
+        children: [],
+        id: claim.id,
+        start: claim.start,
+        mod: claim.mod,
+        end: claim.end,
+        creator: claim.creator,
+        title: claim.title,
+        negation: claim.negation,
+        question: claim.question,
+        desc: claim.desc,
+        mp: claim.mp,
+        mprule: claim.mprule,
+        truth: claim.truth,
+        truthRU: claim.truthRU,
+        proargs: claim.proargs,
+        conargs: claim.conargs,
+        parent: null,
+        internal: {
+          type: 'Claim',
+          contentDigest: crypto
+            .createHash(`md5`)
+            .update(JSON.stringify(claim))
+            .digest(`hex`),
+        },
+      });
+    }
   }
 };
 
