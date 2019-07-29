@@ -20,7 +20,7 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
 exports.sourceNodes = async ({ boundActionCreators }) => {
   const { createNode } = boundActionCreators;
   
-  const result = await axios.get('http://localhost:8080/api/claims', {
+  const result = await axios.get(`${process.env.GATSBY_API_URL}/api/claims`, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
