@@ -18,6 +18,7 @@ import { format } from 'date-fns'
 import { useStore, useActions } from "../configureStore";
 import { theme } from "../theme";
 import Layout from '../components/layout'
+import { isBrowser } from '../utils/helper'
 
 export default function Claims() {
   const isLoadingForm = useStore(state => state.claim.isLoadingForm);
@@ -139,7 +140,7 @@ export default function Claims() {
             flex: "1",
             flexDirection: "column"
           }}
-          width={window.innerWidth > 1000 ? 650 : "100%"}
+          width={isBrowser && window.innerWidth > 1000 ? 650 : "100%"}
         >
           <Pane zIndex={1} flexShrink={0} elevation={0} backgroundColor="white">
             <Pane padding={16}>
@@ -152,7 +153,7 @@ export default function Claims() {
             </Pane>
           </Pane>
           <Pane flex="1" overflowY="scroll" background="tint1" padding={16}>
-            {window.innerWidth <= 1000 && (
+            {isBrowser && window.innerWidth <= 1000 && (
               <Button
                 height={44}
                 marginBottom={10}

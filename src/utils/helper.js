@@ -1,6 +1,8 @@
 import get from "lodash/get";
 import { auth as useAuth } from "../hooks/auth";
 
+export const isBrowser = typeof window !== `undefined`
+
 export const dateTimeFormater = (value) => {
   if (value !== "") {
     return `${new Date(value).toLocaleDateString()} ${new Date(
