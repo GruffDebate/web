@@ -34,7 +34,7 @@ const Navbar = props => {
           )}
         </ContentLink>
         {isAuth && <BoxAuth>
-          <MenuItem><span>Hi, {user.username}</span></MenuItem>
+          <MenuItem><span>Hi, {user && user.username}</span></MenuItem>
           <Logout onClick={logout}><span>Logout</span></Logout>
         </BoxAuth>}
         {!isAuth && 
