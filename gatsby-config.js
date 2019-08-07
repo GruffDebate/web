@@ -49,6 +49,12 @@ module.exports = {
         path: `${__dirname}/src/assets`,
       },
     },
+    {
+      resolve: `gatsby-plugin-page-creator`,
+      options: {
+        path: `${__dirname}/src/pages`,
+      },
+    },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {

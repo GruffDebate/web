@@ -15,7 +15,7 @@ const Card = props => {
             {props.img ? <img src={props.img} alt={props.title} /> : <div></div>}
           </CardImage>
           <CardBox hasImg={Boolean(props.img)}>
-            {props.title}
+            {props.title.length > 223 ? props.title.concat('...') : props.title}
           </CardBox>
           <CardDescription>{props.desc}</CardDescription>
         </CardPosition>
@@ -67,6 +67,7 @@ const CardPosition = styled.div`
   height: 100%;
   width: 100%;
   text-decoration: none;
+  cursor: pointer;
 
   &:after {
     background: linear-gradient(0deg,transparent,rgba(0,0,0,.5));
@@ -83,6 +84,7 @@ const CardImage = styled.div`
   flex: none;
   position: relative;
   background-color: #a9b0b8;
+  cursor: pointer;
 
   > img {
     height: 104px;
@@ -108,6 +110,8 @@ const CardBox = styled.label`
   overflow: hidden;
   word-wrap: break-word;
   position: relative;
+  max-height: 100px;
+  cursor: pointer;
 `;
 
 const CardDescription = styled.p`

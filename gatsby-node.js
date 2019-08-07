@@ -63,7 +63,7 @@ exports.sourceNodes = async ({ boundActionCreators }) => {
 exports.onCreatePage = async ({ page, boundActionCreators }) => {
   const { createPage } = boundActionCreators;
   if (page.path.match(/^\/c/)) {
-    page.matchPath = "/c/:path";
+    page.matchPath = "/c/:key";
     createPage(page);
   }
 };
