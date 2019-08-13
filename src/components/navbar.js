@@ -150,9 +150,9 @@ const Logout = styled.a`
   transition: color .2s,background-color .2s,border-color .2s,opacity .2s;
 
   &:hover {
-    color: #fff;
-    background: #a9b0b8;
-    border-color: #a9b0b8;
+    color: #333;
+    background: #f6faff;
+    border-color: #f6faff;
     padding: 10px;
     transition: background-color .3s ease-in-out;
   }

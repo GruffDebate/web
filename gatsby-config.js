@@ -49,12 +49,6 @@ module.exports = {
         path: `${__dirname}/src/assets`,
       },
     },
-    {
-      resolve: `gatsby-plugin-page-creator`,
-      options: {
-        path: `${__dirname}/src/pages`,
-      },
-    },
     `gatsby-plugin-netlify`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,

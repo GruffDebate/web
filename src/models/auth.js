@@ -3,7 +3,6 @@ import { login, signup } from "../services/auth";
 import { navigate } from "gatsby"
 import { get } from "lodash";
 import { toaster } from "evergreen-ui";
-import { format } from "date-fns";
 import { checkLocalStorage, setInLocalStorage } from "../utils/localstorage";
 import { GetMe } from "../services/user";
 const isBrowser = typeof window !== `undefined`

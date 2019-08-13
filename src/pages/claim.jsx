@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useStore, useActions } from "../configureStore";
 import { IconButton } from 'evergreen-ui';
+import { navigate } from "gatsby";
 import Layout from '../components/layout'
 
 export default function Claim(props) {
@@ -18,7 +19,7 @@ export default function Claim(props) {
         <ClaimContainer>
           <ClaimBody>
             <ClaimHeader>
-              Truth: 10
+              Truth: {claim.truth}
             </ClaimHeader>
             <ClaimContent>
               <h2>{claim.title}</h2>
@@ -27,10 +28,13 @@ export default function Claim(props) {
           </ClaimBody>
         </ClaimContainer>
         {
-          claim.premise && (
-            <ClaimPremise>
-              <Premise data={claim.premise ? claim.premise : []}></Premise>
-            </ClaimPremise>
+          claim.premises && (
+            <>
+              <h3>Premises</h3>
+              <ClaimPremise size={claim.premises ? claim.premises.length : 0}>
+                <Premise data={claim.premises ? claim.premises : []}></Premise>
+              </ClaimPremise>
+            </>
           )
         }
         <ClaimArgument>
@@ -64,25 +68,36 @@ export default function Claim(props) {
 
 const Premise = ({ data }) => (
   data.map((item, idx) => (
-    <PremiseContainer key={idx}>
+    <PremiseContainer key={idx} onClick={() => navigate(`/c/${item.id}`)}>
       <PremiseBody>
-        <h5>{item.title}</h5>
+        <h4>{item.title}</h4>
+        <h5>{item.desc}</h5>
+        <p>Question: {item.question}</p>
+        <p>Negation: {item.negation}</p>
       </PremiseBody>
     </PremiseContainer>
   ))
 )
 
 const Arguments = ({ data, type }) => (
-  data.map((item, idx) => (
-    <ArgumentContainer key={idx} type={type}>
+  data.length > 0 ? data.map((item, idx) => (
+    <ArgumentContainer key={idx} type={type} onClick={() => navigate(`/c/${item.claimId}`)}>
       <ArgumentHeader>
-        truth: 4
+        relevance: {item.relevance}
+      </ArgumentHeader>
+      <ArgumentHeader>
+        strength: {item.strength}
       </ArgumentHeader>
       <ArgumentBody>
         <h3>{item.title}</h3>
       </ArgumentBody>
     </ArgumentContainer>
-  ))
+  )) :
+    <ArgumentEmpty type={type}>
+      <EmptyTitle>
+        Be the first to make a {type} argument
+      </EmptyTitle>
+    </ArgumentEmpty>
 )
 
 const PremiseContainer = styled.div`
@@ -101,10 +116,28 @@ const PremiseBody = styled.div`
   width: 90%;
   text-decoration: none;
 
+  > h4 {
+    margin-bottom: 1px;
+    margin-top: 5px;
+    color: #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
   > h5 {
+    margin-top: 3px;
+    margin-bottom: 10px;
     font-size: 16px;
     font-weight: 500;
     color: #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  p {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    font-size: 14px;
     white-space: pre-wrap;
     word-wrap: break-word;
   }
@@ -118,6 +151,11 @@ const ArgumentContainer = styled.div`
   &:hover {
     box-shadow: ${props => props.type === 'pro' ? '0 0 0.3rem 0 #41cc90' : '0 0 0.3rem 0 #ff725c'};
   }
+`
+
+const ArgumentEmpty = styled.div`
+  min-height: 108px;
+  border: ${props => props.type === 'pro' ? '2px dotted #41cc90' : '2px dotted #ff725c'};
 `
 
 const ArgumentHeader = styled.div`
@@ -141,6 +179,13 @@ const ArgumentBody = styled.div`
   }
 `
 
+const EmptyTitle = styled.p`
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+`
+
 
 const Container = styled.div`
   padding: 2em 1em;
@@ -162,7 +207,7 @@ const ClaimContainer = styled.div`
 const ClaimBody = styled.div`
   padding: 16px 16px 16px 24px;
   cursor: pointer;
-  width: 100%;
+  width: 95%;
   text-decoration: none;
 `
 
@@ -207,7 +252,7 @@ const ClaimArgumentList = styled.div`
 const ClaimPremise = styled.div`
   display: grid;
   grid-gap: 5px;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: ${props => props.size <= 5 ? `repeat(${props.size}, 1fr);` : 'repeat(5, 1fr);'};
   margin-top: 8px;
   margin-bottom: 8px;
   /* background-color: #fff; */

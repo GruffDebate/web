@@ -174,9 +174,8 @@ export default function Claims() {
                 return errors;
               }}
               onSubmit={(values, { setSubmitting }) => {
-                console.log(claim)
                 if (claim._key) {
-                  updateClaim({ _key: claim._key, model: values });
+                  updateClaim({ id: claim.id, model: values });
                 } else {
                   createClaim(values);
                 }

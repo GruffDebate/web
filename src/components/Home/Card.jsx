@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { navigate } from "gatsby";
+import { distanceInWordsToNow } from 'date-fns'
 
 const Card = props => {
   const go = (key) => {
@@ -28,11 +29,11 @@ const Card = props => {
             </AvatarImage>
           </AccountAvatar>
           <LastText>
-            commented on a claim
+            {props.creator.split('users/')[1]}
           </LastText>
         </AnnotationLatest>
         <AnnotationTime>
-          30m
+          {distanceInWordsToNow(props.mod)}
         </AnnotationTime>
       </CardAnnotation>
     </Container>
@@ -46,7 +47,7 @@ const Container = styled.a`
   position: relative;
   flex: none;
   overflow: hidden;
-  height: 254px;
+  height: 274px;
   outline: none;
   width: 100%;
   border-radius: 0.2em;

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { navigate } from "gatsby";
 import get from "lodash/get";
 import { toaster } from "evergreen-ui";
 import { auth as useAuth } from "../hooks/auth";
@@ -20,9 +19,7 @@ api.interceptors.request.use(
       !!get(auth, "token", false) || !!get(cachedAuth, "token", false);
     if (
       config.url.includes("login") ||
-      config.url.includes("register") ||
-      config.url.includes("recover") ||
-      config.url.includes("changePassword")
+      config.url.includes("register")
     ) {
       delete config.headers.Authorization;
     } else {
@@ -35,10 +32,9 @@ api.interceptors.request.use(
           config.headers.Authorization = `Bearer ${get(auth, "token", false)}`;
         } else {
           if (
-            !window.location.pathname.includes("login") &&
-            !window.location.pathname.includes("register")
+            window.location.pathname.includes("claims")
           ) {
-            // navigate("/");
+            window.location.href = '/'
           }
         }
       }
@@ -62,7 +58,7 @@ api.interceptors.response.use(
         ) {
           toaster.danger("Session expired", { duration: 5 });
           localStorage.removeItem("gruff_auth");
-          navigate("/");
+          window.location.href = '/'
         }
       }
     } else {
@@ -70,7 +66,7 @@ api.interceptors.response.use(
         window.location.pathname.includes("claims")
       ) {
         localStorage.removeItem("gruff_auth");
-        navigate("/");
+        window.location.href = '/'
       }
     }
     return Promise.reject(error);

@@ -3,14 +3,12 @@ import styled from "styled-components"
 import { Link } from 'gatsby'
 import { ModalRoutingContext } from 'gatsby-plugin-modal-routing'
 import { Formik } from "formik";
-import { TabNavigation, Tab, Pane, Label } from 'evergreen-ui';
+import { TabNavigation, Tab, Label } from 'evergreen-ui';
 import { useStore, useActions } from "../configureStore";
-import { theme } from "../theme";
 
 export default function Login() {
   const isLoading = useStore(state => state.auth.isAuthLoading);
   const authError = useStore(state => state.auth.authError);
-  const updateError = useActions(state => state.auth.updateAuthError);
   const login = useActions(actions => actions.auth.authenticateUser);
   const signup = useActions(actions => actions.auth.createUser);
 
@@ -101,7 +99,6 @@ export default function Login() {
                               name="username"
                               type="text"
                               onChange={handleChange}
-                              onBlur={handleBlur}
                               value={values.username}
                               placeholder="Username"
                               autoComplete={"off"}
@@ -125,7 +122,6 @@ export default function Login() {
                           name="email"
                           type="email"
                           onChange={handleChange}
-                          onBlur={handleBlur}
                           value={values.email}
                           placeholder="Email"
                           autoComplete={"off"}
@@ -147,7 +143,6 @@ export default function Login() {
                           height={45}
                           name="password"
                           onChange={handleChange}
-                          onBlur={handleBlur}
                           value={values.password}
                           placeholder="Password"
                           type="password"
@@ -235,16 +230,6 @@ const HeaderWelcome = styled.div`
   }
 `;
 
-const HeaderLogo = styled.img`
-  width: auto;
-  height: 50px;
-  display: inline-block;
-  margin: 0 0 0px;
-  vertical-align: middle;
-  -webkit-transition: margin-top 0.4s;
-  transition: margin-top 0.4s;
-  margin: 0px 0px 0px 0px;
-`;
 
 const ContentForm = styled.div`
   width: 50%;
@@ -310,40 +295,6 @@ const LabelButton = styled.span`
   line-height: 42px;
   font-size: 1.5em;
   font-weight: bold;
-`;
-
-const LinkCustom = styled(Link)`
-  height: 30px;
-  line-height: 30px;
-  font-size: 10px;
-  font-weight: 400;
-  text-decoration: none;
-  color: ${theme.color.primary};
-  font-family: ${theme.font};
-  :hover {
-    text-decoration: underline;
-  }
-`;
-
-const LinkRegister = styled(Link)`
-  text-decoration: none;
-  :hover {
-    text-decoration: none;
-  }
-`;
-
-const BoxLink = styled.div`
-  height: 50px;
-  padding-left: 40px;
-  padding: 0em 0em 1em 40px;
-  a {
-    font-size: 17px;
-  }
-`;
-
-const BoxCenterLink = styled(BoxLink)`
-  text-align: center;
-  padding-left: 0px;
 `;
 
 const TabContent = styled(Tab)`

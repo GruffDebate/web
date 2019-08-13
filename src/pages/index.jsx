@@ -54,6 +54,8 @@ const Home = () => {
                       title={item.title}
                       desc={item.desc}
                       img={item.img}
+                      creator={item.creator}
+                      mod={item.mod}
                     />
                   ))}
                 </BoxCards>
@@ -66,6 +68,8 @@ const Home = () => {
                       title={item.title}
                       desc={item.desc}
                       img={item.img}
+                      creator={item.creator}
+                      mod={item.mod}
                     />
                   ))}
                 </BoxCards>
