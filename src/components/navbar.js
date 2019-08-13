@@ -97,7 +97,7 @@ const ContextBoxItem = styled.a`
   )}
 `
 
-const ContextBoxItemLabel = styled.div`
+const ContextBoxItemLabel = styled.a`
   cursor: pointer;
   color: #FFFFFF;
   padding-right: 22px;
