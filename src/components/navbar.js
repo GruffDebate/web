@@ -100,12 +100,12 @@ const ContextBoxItem = styled.a`
 const ContextBoxItemLabel = styled.a`
   cursor: pointer;
   color: #FFFFFF;
-  padding-right: 22px;
   font-size: 1em;
 
   > span:hover {
     border-bottom: 1px solid #fff;
     padding-bottom: 4px;
+    padding-right: 22px;
     transition: border-bottom-color .3s ease-in-out;
   }
 `
