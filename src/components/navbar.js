@@ -97,15 +97,15 @@ const ContextBoxItem = styled.a`
   )}
 `
 
-const ContextBoxItemLabel = styled.a`
+const ContextBoxItemLabel = styled.div`
   cursor: pointer;
   color: #FFFFFF;
   font-size: 1em;
+  padding-right: 22px;
 
   > span:hover {
     border-bottom: 1px solid #fff;
     padding-bottom: 4px;
-    padding-right: 22px;
     transition: border-bottom-color .3s ease-in-out;
   }
 `
@@ -129,7 +129,10 @@ const MenuItem = styled.a`
   cursor: pointer; 
   color: #FFFFFF;
   font-size: 1em;
-  margin-right: 50px;
+  
+  > span {
+    margin-right: 50px;
+  }
 
   > span:hover {
     border-bottom: 1px solid #fff;
