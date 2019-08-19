@@ -9,7 +9,6 @@ import { auth as useAuth } from "../hooks/auth";
 
 const Navbar = props => {
   const { auth, cachedAuth } = useAuth(true);
-  const isAuth = !!get(auth, "token", false) || !!get(cachedAuth, "token", false);
   const user = useStore(store => store.auth.user);
   const logout = useActions(actions => actions.auth.clearAuth);
 
@@ -22,33 +21,39 @@ const Navbar = props => {
         </HeaderBoxImg>
         </Header>
         <ContentLink>
-          {props.routes.map((route, key) => (
-            <ContextBoxItem isAuth={isAuth && route.private} private={route.private} key={key} onClick={() => {
-              if (typeof window !== `undefined`) navigate(route.path)}
-            }>
+          {
+            user ? props.routes.map((route, key) => (
+              <ContextBoxItem isAuth={user && route.private} private={route.private} key={key} onClick={() => navigate(route.path) }>
+                <ContextBoxItemLabel>
+                  <span>{route.name}</span>
+                </ContextBoxItemLabel>
+              </ContextBoxItem>
+            )) : 
+            <ContextBoxItem isAuth={false} private={false} onClick={() => navigate('/') }>
               <ContextBoxItemLabel>
-                <span>{route.name}</span>
+                <span>Home</span>
               </ContextBoxItemLabel>
             </ContextBoxItem>
-            )
-          )}
+          }
         </ContentLink>
-        {isAuth && <BoxAuth>
-          <MenuItem><span>Hi, {user && user.username}</span></MenuItem>
-          <Logout onClick={logout}><span>Logout</span></Logout>
-        </BoxAuth>}
-        {!isAuth && 
-          <BoxAuth>
-            <Login 
-              to="/login"
-              state={{
-                modal: true,
-                noScroll: true
-              }}>
-              <span>Login</span>
-            </Login>
-          </BoxAuth>
-        }
+        <BoxAuth>
+          {!user ? (
+              <Login 
+                to="/login"
+                state={{
+                  modal: true,
+                  noScroll: true
+                }}>
+                <span>Login</span>
+              </Login>
+            ) : (
+              <>
+                <MenuItem><span>Hi, {user && user.username}</span></MenuItem>
+                <Logout onClick={logout}><span>Logout</span></Logout>
+              </>
+            )
+          }
+        </BoxAuth>
       </ContentBox>
     </Content>
   )
@@ -125,7 +130,7 @@ const Login = styled(Link)`
   }
 `;
 
-const MenuItem = styled.a`
+const MenuItem = styled.label`
   cursor: pointer; 
   color: #FFFFFF;
   font-size: 1em;
@@ -141,7 +146,7 @@ const MenuItem = styled.a`
   }
 `;
 
-const Logout = styled.a`
+const Logout = styled.label`
   cursor: pointer; 
   color: #FFFFFF;
   font-size: 1em;

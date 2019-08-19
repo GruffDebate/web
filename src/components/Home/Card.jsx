@@ -13,12 +13,12 @@ const Card = props => {
       <CardShape>
         <CardPosition>
           <CardImage>
-            {props.img ? <img src={props.img} alt={props.title} /> : <div></div>}
+            {props.image ? <img src={props.image} alt={props.title} /> : <div></div>}
           </CardImage>
           <CardBox hasImg={Boolean(props.img)}>
             {props.title.length > 223 ? props.title.concat('...') : props.title}
           </CardBox>
-          <CardDescription>{props.desc}</CardDescription>
+          <CardDescription>{props.description}</CardDescription>
         </CardPosition>
       </CardShape>
       <CardAnnotation>

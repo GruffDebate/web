@@ -60,45 +60,15 @@ exports.sourceNodes = async ({ boundActionCreators }) => {
   }
 };
 
-exports.onCreatePage = async ({ page, boundActionCreators }) => {
-  const { createPage } = boundActionCreators;
+exports.onCreatePage = async ({ page, actions }) => {
+  const { createPage } = actions;
   if (page.path.match(/^\/c/) && !page.path.match(/^\/claims/)) {
     page.matchPath = "/c/:key";
     createPage(page);
   }
-};
 
-// exports.createPages = ({ graphql, boundActionCreators }) => {
-//   const { createPage } = boundActionCreators
-//   return new Promise((resolve, reject) => {
-//     graphql(`
-//       {
-//         allClaim {
-//           edges {
-//             node {
-//               id
-//               title
-//               desc
-//               creator
-//             }
-//           }
-//         }
-//       }
-//     `
-//   ).then(result => {
-//     result.data.allClaim.edges.forEach(({ node }) => {
-//       createPage({
-//         path: `c/${node.id}`,
-//         component: path.resolve(`./src/pages/claim.jsx`),
-//         context: {
-//           id: node.id
-//         },
-//       })
-//     });
-//     resolve()
-//   })
-//   }).catch(error => {
-//     console.log(error)
-//     reject()
-//   })
-// };
+  if (page.path.match(/^\/app/)) {
+    page.matchPath = `/app/*`
+    createPage(page)
+  }
+};
