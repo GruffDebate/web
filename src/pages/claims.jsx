@@ -110,7 +110,7 @@ export default function Claims() {
                         <IconButton
                           icon="edit"
                           marginRight={10}
-                          onClick={() => getClaim(item.id)}
+                          onClick={() => getClaim({id: item.id, show: true})}
                         />
                         <IconButton
                           icon="trash"

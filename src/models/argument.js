@@ -27,7 +27,7 @@ const argument = {
       });
     }
   }),
-  createClaim: thunk(async (action, payload) => {
+  createArgument: thunk(async (action, payload) => {
     try {
       action.setLoadingForm({ loading: true });
       await CreateArgument(payload);

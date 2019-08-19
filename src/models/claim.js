@@ -32,9 +32,11 @@ const claim = {
   }),
   getClaim: thunk(async (action, payload) => {
     try {
-      const response = await GetClaim(payload);
+      const response = await GetClaim(payload.id);
       action.setClaim(response.data);
-      action.setShow(true);
+      if (payload.show) {
+        action.setShow(true);
+      }
     } catch (error) {
       action.setError({
         message: "There was an error loading claims."

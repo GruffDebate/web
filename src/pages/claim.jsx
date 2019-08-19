@@ -1,20 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useStore, useActions } from "../configureStore";
 import { IconButton } from 'evergreen-ui';
 import { navigate } from "gatsby";
 import Layout from '../components/layout'
 
+import SideSheetClaim from '../components/Claim/SideSheetClaim'
+
 export default function Claim(props) {
   const getClaim = useActions(actions => actions.claim.getClaim);
   const claim = useStore(store => store.claim.claim);
+  const isShow = useStore(state => state.argument.isShow);
+  const setShow = useActions(action => action.argument.setShow);
+
+  const [type, setType] = useState('')
 
   useEffect(() => {
-    getClaim(props.location.pathname.split('/c/')[1]);
+    if (claim.id !== props.location.pathname.split('/c/')[1]) {
+      getClaim({id: props.location.pathname.split('/c/')[1], show: false});
+    }
   }, []);
+
+  useEffect(() => {
+    if (!isShow && claim.id === props.location.pathname.split('/c/')[1]) {
+      getClaim({id: claim.id, show: false})
+    }
+  }, [isShow])
 
   return (
     <Layout>
+      <SideSheetClaim type={type} />
       <Container>
         <ClaimContainer>
           <ClaimBody>
@@ -44,7 +59,10 @@ export default function Claim(props) {
               icon="plus"
               appearance="primary" 
               intent="success"
-              onClick={() => {}}
+              onClick={() => {
+                setType('pro')
+                setShow(true)
+              }}
             />
           </ArgumentBox>
           <ArgumentBox type={"cons"}>
@@ -53,14 +71,21 @@ export default function Claim(props) {
               icon="plus"
               appearance="primary" 
               intent="danger"
-              onClick={() => {}}
+              onClick={() => {
+                setType('cons')
+                setShow(true)
+              }}
             />
           </ArgumentBox>
         </ClaimArgument>
-        <ClaimArgumentList>
-          <Arguments type={"pro"} data={claim.proargs ? claim.proargs : []}></Arguments>
-          <Arguments type={"cons"} data={claim.conargs ? claim.conargs: []}></Arguments>
-        </ClaimArgumentList>
+        <ClaimArgumentContainer>
+          <ClaimArgumentList>
+            <Arguments type={"pro"} data={claim.proargs ? claim.proargs : []}></Arguments>
+          </ClaimArgumentList>
+          <ClaimArgumentList>
+            <Arguments type={"cons"} data={claim.conargs ? claim.conargs: []}></Arguments>
+          </ClaimArgumentList>
+        </ClaimArgumentContainer>
       </Container>
     </Layout>
   );
@@ -72,8 +97,6 @@ const Premise = ({ data }) => (
       <PremiseBody>
         <h4>{item.title}</h4>
         <h5>{item.desc}</h5>
-        <p>Question: {item.question}</p>
-        <p>Negation: {item.negation}</p>
       </PremiseBody>
     </PremiseContainer>
   ))
@@ -147,6 +170,7 @@ const ArgumentContainer = styled.div`
   min-height: 108px;
   box-shadow: 0 0 1rem 0 rgba(136,152,170,0.15);
   background-color: #fff;
+  margin-bottom: 0.5em;
 
   &:hover {
     box-shadow: ${props => props.type === 'pro' ? '0 0 0.3rem 0 #41cc90' : '0 0 0.3rem 0 #ff725c'};
@@ -158,14 +182,17 @@ const ArgumentEmpty = styled.div`
   border: ${props => props.type === 'pro' ? '2px dotted #41cc90' : '2px dotted #ff725c'};
 `
 
-const ArgumentHeader = styled.div`
+const ArgumentHeader = styled.p`
   padding-top: 5px;
   padding-left: 20px;
   height: 15px;
+  margin: 0;
+  font-size: 0.8em;
+  color: #bdc3c7;
 `
 
 const ArgumentBody = styled.div`
-  padding: 12px 12px 12px 20px;
+  padding: 5px 12px 6px 20px;
   cursor: pointer;
   width: 90%;
   text-decoration: none;
@@ -242,10 +269,15 @@ const ClaimArgument = styled.div`
   box-shadow: 0 0 1rem 0 rgba(136,152,170,0.15);
 `
 
-const ClaimArgumentList = styled.div`
+const ClaimArgumentContainer = styled.div`
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 1fr 1fr;
+`
+
+const ClaimArgumentList = styled.div`
+  display: flex;
+  flex-direction: column;
   margin-top: 8px;
 `
 
@@ -255,7 +287,6 @@ const ClaimPremise = styled.div`
   grid-template-columns: ${props => props.size <= 5 ? `repeat(${props.size}, 1fr);` : 'repeat(5, 1fr);'};
   margin-top: 8px;
   margin-bottom: 8px;
-  /* background-color: #fff; */
 `
 
 const ArgumentBox = styled.div`

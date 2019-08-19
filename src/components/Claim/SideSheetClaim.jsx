@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Formik } from "formik";
 import { useStore, useActions } from "../../configureStore";
-import { Pane, SideSheet, Heading, Button, Paragraph, } from 'evergreen-ui';
+import { Pane, TextInput, Label, Textarea, SideSheet, Heading, Button, Paragraph, } from 'evergreen-ui';
 import { isBrowser } from '../../utils/helper'
+import { theme } from "../../theme";
 
-const SideSheetClaim = () => {
+const SideSheetClaim = (props) => {
   const isShow = useStore(state => state.argument.isShow);
   const setShow = useActions(action => action.argument.setShow);
+  const isLoadingForm = useStore(state => state.argument.isLoadingForm);
+
+  const createArgument = useActions(action => action.argument.createArgument);
+  const claim = useStore(store => store.claim.claim);
 
   return (
     <SideSheet
@@ -23,10 +28,10 @@ const SideSheetClaim = () => {
     <Pane zIndex={1} flexShrink={0} elevation={0} backgroundColor="white">
       <Pane padding={16}>
         <Heading size={600} textAlign={"center"}>
-          Create new claim
+          Create new argument
         </Heading>
         <Paragraph size={400} textAlign={"center"} marginTop={5}>
-          Fill in the fields to create your claim.
+          Fill in the fields to create your argument.
         </Paragraph>
       </Pane>
     </Pane>
@@ -42,7 +47,7 @@ const SideSheetClaim = () => {
       )}
       <Formik
         enableReinitialize
-        initialValues={claim}
+        initialValues={{ title: '', desc: '' }}
         validate={values => {
           let errors = {};
           if (!values.title) {
@@ -52,12 +57,12 @@ const SideSheetClaim = () => {
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-          console.log(claim)
-          if (claim._key) {
-            updateClaim({ _key: claim._key, model: values });
-          } else {
-            createClaim(values);
+          const model = {
+             ...values,
+             targetClaimId: claim.id,
+             pro: props.type === 'pro' ? true : false,
           }
+          createArgument(model);
           setSubmitting(false);
         }}
       >
@@ -137,33 +142,26 @@ const SideSheetClaim = () => {
 
 export default SideSheetClaim;
 
-const Container = styled.div`
-  padding: 2em 1em;
+const MessageError = styled.span`
+  transition: 0.2s ease-in-out;
+  margin-bottom: 5px;
+  color: ${props => props.theme.color.red};
+  font-size: 1em;
 `;
 
-//cards
-const BoxCards = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 20px;
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr 1fr;
-  }
-  @media (max-width: 500px) {
-    grid-template-columns: 1fr;
-  }
+const BoxInput = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 30px;
 `;
 
-const HeaderTab = styled.div`
-  font-size: 20px;
-  width: 100%;
-  border: none;
-  p {
-    margin: 0;
-    padding: 0.7em;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #32325d;
+const ButtonCenter = styled(Button)`
+  display: block;
+  margin: 25px auto;
+  background: ${theme.color.primary};
+  :hover {
+    background: ${theme.color.primary} !important;
+    opacity: 0.7;
   }
 `;

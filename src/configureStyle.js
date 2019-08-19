@@ -220,26 +220,6 @@ export const GlobalStyle = createGlobalStyle`
     src: url(/fonts/Lato-Regular.ttf);
   }
 
-  /* @font-face {
-    font-family: OpenSansLight;
-    src: url(/fonts/OpenSans-Light.ttf);
-  }
-
-  @font-face {
-    font-family: CodeProBold;
-    src: url(/fonts/CodeProBold.otf);
-  }
-
-  @font-face {
-    font-family: CodePro;
-    src: url(/fonts/CodeProRegular.otf);
-  }
-
-  @font-face {
-    font-family: PtSans;
-    src: url(/fonts/PTSansRegular.ttf);
-  }  */
-
   #react-paginate ul {
     display: flex;
     align-items: center;
