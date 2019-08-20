@@ -23,7 +23,7 @@ const SideSheetClaim = (props) => {
         flex: "1",
         flexDirection: "column"
       }}
-      width={isBrowser && window.innerWidth > 1000 ? 650 : "100%"}
+      width={isBrowser && window.innerWidth > 1000 ? 900 : "100%"}
     >
     <Pane zIndex={1} flexShrink={0} elevation={0} backgroundColor="white">
       <Pane padding={16}>
