@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { navigate } from "gatsby";
 import { distanceInWordsToNow } from 'date-fns'
 
+import UserEmpty from '../../assets/images/user-empty.png'
+
 const Card = props => {
   const go = (key) => {
     navigate(`/c/${key}`)
@@ -13,7 +15,7 @@ const Card = props => {
       <CardShape>
         <CardPosition>
           <CardImage>
-            {props.image ? <img src={props.image} alt={props.title} /> : <div></div>}
+            {props.img ? <img src={`${process.env.GATSBY_ASSETS_BUCKET}/claims/${props.img}`} alt={props.title} /> : <div></div>}
           </CardImage>
           <CardBox hasImg={Boolean(props.img)}>
             {props.title.length > 223 ? props.title.concat('...') : props.title}
@@ -25,11 +27,11 @@ const Card = props => {
         <AnnotationLatest>
           <AccountAvatar>
             <AvatarImage>
-              <img src="https://www.kialo.com/images/e224d270-af09-4b9c-b9b5-89a3ec3edc6e_32x32.png" alt="User avatar" />
+              <img src={UserEmpty} alt="User avatar" />
             </AvatarImage>
           </AccountAvatar>
           <LastText>
-            {props.creator ? props.creator.split('users/')[1] : 'anonymous'}
+            {props.creator.split('users/')[1] ? props.creator.split('users/')[1] : 'anonymous'}
           </LastText>
         </AnnotationLatest>
         <AnnotationTime>

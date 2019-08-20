@@ -21,6 +21,9 @@ export default function Login() {
         <Container>
           <Box>
             <Content>
+              <Link to={"/"} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <svg fill="#fff" preserveAspectRatio="xMidYMid meet" height="2em" width="2em" viewBox="0 0 40 40"><g><path d="m31.6 10.7l-9.3 9.3 9.3 9.3-2.3 2.3-9.3-9.3-9.3 9.3-2.3-2.3 9.3-9.3-9.3-9.3 2.3-2.3 9.3 9.3 9.3-9.3z"></path></g></svg>
+              </Link>
               <Header>
                 <HeaderWelcome>
                   <h1>Log In</h1>
@@ -75,7 +78,6 @@ export default function Login() {
                   errors,
                   touched,
                   handleChange,
-                  handleBlur,
                   handleSubmit,
                   isSubmitting
                 }) => (
@@ -156,9 +158,6 @@ export default function Login() {
                         <LabelButton>{isLoading ? "SIGNING" : "SIGN IN"}</LabelButton>
                       </Button>
                     </form>
-                    <Link to={"/"}>
-                      <svg fill="#fff" preserveAspectRatio="xMidYMid meet" height="2em" width="2em" viewBox="0 0 40 40"><g><path d="m31.6 10.7l-9.3 9.3 9.3 9.3-2.3 2.3-9.3-9.3-9.3 9.3-2.3-2.3 9.3-9.3-9.3-9.3 2.3-2.3 9.3 9.3 9.3-9.3z"></path></g></svg>
-                    </Link>
                   </>
                 )}
               </Formik>

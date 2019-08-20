@@ -18,7 +18,8 @@ const claim = {
   claims: [],
   claim: {
     title: "",
-    desc: ""
+    desc: "",
+    img: "",
   },
   listClaims: thunk(async (action, payload) => {
     try {
@@ -63,6 +64,7 @@ const claim = {
       await UpdateClaim(payload.id, {
         title: payload.model.title,
         desc: payload.model.desc,
+        img: payload.model.img,
         _key: payload.model._key,
       });
       action.setShow(false);
@@ -112,7 +114,8 @@ const claim = {
   clearClaim: action(state => {
     state.claim = {
       title: "",
-      desc: ""
+      desc: "",
+      img: ""
     };
   })
 };

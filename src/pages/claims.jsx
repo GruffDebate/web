@@ -12,13 +12,16 @@ import {
   Paragraph,
   Label,
   TextInput,
-  Textarea
+  Textarea,
+  toaster
 } from "evergreen-ui";
+import Dropzone from "react-dropzone";
 import { format } from 'date-fns'
 import { useStore, useActions } from "../configureStore";
 import { theme } from "../theme";
 import Layout from '../components/layout'
 import { isBrowser } from '../utils/helper'
+import { Upload } from '../utils/upload'
 
 export default function Claims() {
   const isLoadingForm = useStore(state => state.claim.isLoadingForm);
@@ -90,6 +93,7 @@ export default function Claims() {
           <NewTable>
             <Table.Head>
               <Table.TextHeaderCell>CreatedAt</Table.TextHeaderCell>
+              <Table.TextHeaderCell>Image</Table.TextHeaderCell>
               <Table.TextHeaderCell>ID</Table.TextHeaderCell>
               <Table.TextHeaderCell>Title</Table.TextHeaderCell>
               <Table.TextHeaderCell>Description</Table.TextHeaderCell>
@@ -101,6 +105,13 @@ export default function Claims() {
                   <Table.Row key={idx}>
                     <Table.TextCell>
                       {format(new Date(item.start), 'YYYY-MM-DD')}
+                    </Table.TextCell>
+                    <Table.TextCell>
+                     {item.img && <img
+                        width="45"
+                        src={`${process.env.GATSBY_ASSETS_BUCKET}/claims/${item.img}`}
+                        alt={item.title}
+                      />}
                     </Table.TextCell>
                     <Table.TextCell>{item.id}</Table.TextCell>
                     <Table.TextCell>{item.title}</Table.TextCell>
@@ -189,9 +200,40 @@ export default function Claims() {
                 handleChange,
                 handleBlur,
                 handleSubmit,
-                isSubmitting
+                isSubmitting,
+                setFieldValue
               }) => (
                 <form onSubmit={handleSubmit}>
+                  <Dropzone
+                    onDrop={async acceptedFiles => {
+                      if (acceptedFiles.length > 1) {
+                        toaster.warning("Limit 1 image");
+                        return;
+                      }
+
+                      for (const file of acceptedFiles) {
+                        const fileName = await Upload("claims", file);
+                        setFieldValue('img', fileName)
+                      }
+                    }}
+                  >
+                  {({ getRootProps, getInputProps }) => (
+                    <SectionGallery>
+                      <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        {!values.img ? (
+                          <p>Select Image</p>
+                        ) : 
+                          <img
+                            src={`${process.env.GATSBY_ASSETS_BUCKET}/claims/${values.img}`}
+                            width="auto"
+                            height="100px"
+                          />
+                        }
+                      </div>
+                    </SectionGallery>
+                  )}
+                </Dropzone>
                   <BoxInput>
                     <Label
                       htmlFor={45}
@@ -314,5 +356,35 @@ const ButtonCenter = styled(Button)`
   :hover {
     background: ${theme.color.primary} !important;
     opacity: 0.7;
+  }
+`;
+
+const SectionGallery = styled.div`
+  height: 140px;
+  border: 2px solid #eee;
+  border-style: dashed;
+  text-align: center;
+  cursor: pointer;
+  outline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    width: 100%;
+  }
+
+  p {
+    margin: 0;
+    outline: 0;
+    font-size: 1.2em;
+    height: 130px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  img {
+    margin: 20px 10px;
   }
 `;
