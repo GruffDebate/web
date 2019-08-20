@@ -29,7 +29,7 @@ const Card = props => {
             </AvatarImage>
           </AccountAvatar>
           <LastText>
-            {props.creator.split('users/')[1]}
+            {props.creator ? props.creator.split('users/')[1] : 'anonymous'}
           </LastText>
         </AnnotationLatest>
         <AnnotationTime>
