@@ -114,7 +114,7 @@ const Arguments = ({ data, type }) => (
         strength: {item.strength}
       </ArgumentHeader>
       <ArgumentBody>
-        <h3>{item.title}</h3>
+        <h3>{!item.title ? item.claim.title : item.title}</h3>
       </ArgumentBody>
     </ArgumentContainer>
   )) :
