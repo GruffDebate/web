@@ -62,6 +62,7 @@ api.interceptors.response.use(
         } else {
           toaster.danger("Session expired", { duration: 5 });
           localStorage.removeItem("gruff_auth");
+          window.location.reload()
         }
       }
     } else {
