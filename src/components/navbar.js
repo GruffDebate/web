@@ -2,13 +2,13 @@ import React from "react";
 import get from "lodash/get";
 import { Link, navigate } from 'gatsby'
 import styled, { css } from "styled-components";
-import { ifProp } from "styled-tools";
+import { ifProp, switchProp } from "styled-tools";
 import { useStore, useActions } from "../configureStore";
 import LogoIcon from "../assets/images/icon.png";
 import { auth as useAuth } from "../hooks/auth";
+import { isCurator } from '../utils/helper'
 
 const Navbar = props => {
-  const { auth, cachedAuth } = useAuth(true);
   const user = useStore(store => store.auth.user);
   const logout = useActions(actions => actions.auth.clearAuth);
 
@@ -23,13 +23,13 @@ const Navbar = props => {
         <ContentLink>
           {
             user ? props.routes.map((route, key) => (
-              <ContextBoxItem isAuth={user && route.private} private={route.private} key={key} onClick={() => navigate(route.path) }>
+              <ContextBoxItem permission={user && !isCurator() ? 'user' : user && isCurator() ? 'curator' : 'guest'} curator={route.curator}  private={route.private} key={key} onClick={() => navigate(route.path) }>
                 <ContextBoxItemLabel>
                   <span>{route.name}</span>
                 </ContextBoxItemLabel>
               </ContextBoxItem>
             )) : 
-            <ContextBoxItem isAuth={false} private={false} onClick={() => navigate('/') }>
+            <ContextBoxItem isAuth={false} private={false} curator={false} onClick={() => navigate('/') }>
               <ContextBoxItemLabel>
                 <span>Home</span>
               </ContextBoxItemLabel>
@@ -91,15 +91,17 @@ const ContextBoxItem = styled.a`
     margin-left: 1.8em;
   }
 
-  ${ifProp(
-     { isAuth: true },
-    css`
-      display: flex;
+  ${switchProp("permission", {
+    guest: css`
+      display: 'none';
     `,
-    css`
-      display: ${props => props.private ? 'none' : 'flex' };
+    user: css`
+      display: ${props => props.curator ? 'none' : 'flex' };
+    `,
+    curator: css`
+      display: 'flex';
     `
-  )}
+  })}
 `
 
 const ContextBoxItemLabel = styled.div`

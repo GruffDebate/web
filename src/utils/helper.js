@@ -23,3 +23,15 @@ export const userId = () => {
 
   return 0;
 };
+
+export const isCurator = () => {
+  const { auth, cachedAuth } = useAuth(false);
+  const isAuth =
+    !!get(auth, "token", false) || !!get(cachedAuth, "token", false);
+
+  if (isAuth) {
+    return get(auth, "user.curator", 0) || get(cachedAuth, "user.curator", 0);
+  }
+
+  return 0;
+};

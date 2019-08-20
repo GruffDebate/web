@@ -5,7 +5,7 @@ require("dotenv").config({
 module.exports = {
   siteMetadata: {
     title: `Gruff`,
-    description: `Gruff`,
+    description: `Wikipedia for debates`,
     author: `Gruff`,
   },
   plugins: [

@@ -3,6 +3,7 @@ import { Router } from "@reach/router"
 import Claims from "./claims"
 import Home from "./index" 
 import Claim from "./claim" 
+import Contexts from "./contexts" 
 import PrivateRoute from "../components/PrivateRoute"
 import Login from "./login"
 
@@ -12,6 +13,7 @@ const App = () => {
   return (
     <Router>
       <PrivateRoute path="/app/claims" component={Claims} />
+      <PrivateRoute path="/app/contexts" component={Contexts} />
       <PublicRoute path="/">
         <Home path="/" />
         <Claim path="/c/:key"/>

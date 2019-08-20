@@ -9,12 +9,21 @@ const Layout = ({ children }) => {
       name: "Home",
       description: "Home",
       private: false,
+      curator: false,
     },
     {
-      path: "/claims",
+      path: "/app/claims",
       name: "Claim",
       description: "Claim",
       private: true,
+      curator: false,
+    },
+    {
+      path: "/app/contexts",
+      name: "Contexts",
+      description: "Contexts",
+      private: true,
+      curator: true,
     },
   ];
 

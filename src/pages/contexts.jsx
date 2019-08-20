@@ -18,39 +18,44 @@ import { format } from 'date-fns'
 import { useStore, useActions } from "../configureStore";
 import { theme } from "../theme";
 import Layout from '../components/layout'
-import { isBrowser } from '../utils/helper'
+import { isBrowser, isCurator } from '../utils/helper'
+import { navigate } from "gatsby";
 
-export default function Claims() {
-  const isLoadingForm = useStore(state => state.claim.isLoadingForm);
-  const isLoadingDelete = useStore(state => state.claim.isLoadingDelete);
-  const isShow = useStore(state => state.claim.isShow);
-  const setShow = useActions(state => state.claim.setShow);
-  const getClaim = useActions(actions => actions.claim.getClaim);
-  const createClaim = useActions(actions => actions.claim.createClaim);
-  const claims = useStore(state => state.claim.claims);
-  const listClaims = useActions(actions => actions.claim.listClaims);
-  const claim = useStore(state => state.claim.claim);
-  const updateClaim = useActions(actions => actions.claim.updateClaim);
-  const deleteClaim = useActions(actions => actions.claim.deleteClaim);
-  const clearClaim = useActions(state => state.claim.clearClaim);
+export default function Contexts() {
+  const isLoadingForm = useStore(state => state.context.isLoadingForm);
+  const isLoadingDelete = useStore(state => state.context.isLoadingDelete);
+  const isShow = useStore(state => state.context.isShow);
+  const setShow = useActions(state => state.context.setShow);
+  const get = useActions(actions => actions.context.get);
+  const create = useActions(actions => actions.context.create);
+  const contexts = useStore(state => state.context.contexts);
+  const list = useActions(actions => actions.context.list);
+  const context = useStore(state => state.context.context);
+  const update = useActions(actions => actions.context.update);
+  const deleteContext = useActions(actions => actions.context.delete);
+  const clear = useActions(state => state.context.clear);
 
   const [showDelete, setShowDelete] = useState(false);
   const [deleteItem, setDeleteItem] = useState({});
 
   useEffect(() => {
-    listClaims();
+    if (isCurator()) {
+      list();
+    } else {
+      navigate('/')
+    }
   }, []);
 
   useEffect(() => {
     if (!isShow) {
-      listClaims();
+      list();
     }
   }, [isShow]);
 
   useEffect(() => {
     if (!isLoadingDelete && showDelete) {
       setShowDelete(false);
-      listClaims();
+      list();
     }
   }, [isLoadingDelete]);
 
@@ -59,17 +64,17 @@ export default function Claims() {
       <Container>
         <Dialog
           isShown={showDelete}
-          title="Delete Claim"
+          title="Delete Context"
           onCloseComplete={() => setShowDelete(false)}
           isConfirmLoading={isLoadingDelete}
           onConfirm={() => {
-            deleteClaim(deleteItem.id);
+            deleteContext(deleteItem.id);
           }}
           cancelLabel="CANCEL"
           intent="danger"
           confirmLabel={isLoadingDelete ? "DELETING" : "DELETE"}
         >
-          Do you really want to delete the Claim?<b>{deleteItem.name}</b>?
+          Do you really want to delete the Context?<b>{deleteItem.name}</b>?
         </Dialog>
         <BoxTable>
           <Button
@@ -81,36 +86,44 @@ export default function Claims() {
             intent="success"
             iconBefore="add"
             onClick={() => {
-              clearClaim();
+              clear();
               setShow(true);
             }}
           >
-            New claim
+            New Context
           </Button>
           <NewTable>
             <Table.Head>
               <Table.TextHeaderCell>CreatedAt</Table.TextHeaderCell>
               <Table.TextHeaderCell>ID</Table.TextHeaderCell>
               <Table.TextHeaderCell>Title</Table.TextHeaderCell>
+              <Table.TextHeaderCell>Short Name</Table.TextHeaderCell>
               <Table.TextHeaderCell>Description</Table.TextHeaderCell>
+              <Table.TextHeaderCell>URL</Table.TextHeaderCell>
+              <Table.TextHeaderCell>Google KG</Table.TextHeaderCell>
+              <Table.TextHeaderCell>Wikidata</Table.TextHeaderCell>
               <Table.TextHeaderCell>Actions</Table.TextHeaderCell>
             </Table.Head>
-            <Table.VirtualBody height={400}>
-              {claims && claims.length > 0 ? (
-                claims.map((item, idx) => (
+            <Table.VirtualBody height={450}>
+              {contexts && contexts.length > 0 ? (
+                contexts.map((item, idx) => (
                   <Table.Row key={idx}>
                     <Table.TextCell>
                       {format(new Date(item.start), 'YYYY-MM-DD')}
                     </Table.TextCell>
-                    <Table.TextCell>{item.id}</Table.TextCell>
+                    <Table.TextCell>{item._key}</Table.TextCell>
+                    <Table.TextCell>{item.name}</Table.TextCell>
                     <Table.TextCell>{item.title}</Table.TextCell>
                     <Table.TextCell>{item.desc}</Table.TextCell>
+                    <Table.TextCell>{item.url}</Table.TextCell>
+                    <Table.TextCell>{item.gid}</Table.TextCell>
+                    <Table.TextCell>{item.qid}</Table.TextCell>
                     <Table.Cell>
                       <Pane display="flex" flexDirection="row">
                         <IconButton
                           icon="edit"
                           marginRight={10}
-                          onClick={() => getClaim({id: item.id, show: true})}
+                          onClick={() => get({id: item._key, show: true})}
                         />
                         <IconButton
                           icon="trash"
@@ -126,7 +139,7 @@ export default function Claims() {
                 ))
               ) : (
                 <EmptyState>
-                  <p>You have no claims.</p>
+                  <p>You have no contexts.</p>
                 </EmptyState>
               )}
             </Table.VirtualBody>
@@ -145,10 +158,10 @@ export default function Claims() {
           <Pane zIndex={1} flexShrink={0} elevation={0} backgroundColor="white">
             <Pane padding={16}>
               <Heading size={600} textAlign={"center"}>
-                Create new claim
+                Create new context
               </Heading>
               <Paragraph size={400} textAlign={"center"} marginTop={5}>
-                Fill in the fields to create your claim.
+                Fill in the fields to create your context.
               </Paragraph>
             </Pane>
           </Pane>
@@ -164,20 +177,29 @@ export default function Claims() {
             )}
             <Formik
               enableReinitialize
-              initialValues={claim}
+              initialValues={context}
               validate={values => {
                 let errors = {};
+                if (!values.name) {
+                  errors.name = "Required";
+                }
                 if (!values.title) {
                   errors.title = "Required";
+                }
+                if (!values.desc) {
+                  errors.desc = "Required";
+                }
+                if (!values.url) {
+                  errors.url = "Required";
                 }
 
                 return errors;
               }}
               onSubmit={(values, { setSubmitting }) => {
-                if (claim._key) {
-                  updateClaim({ id: claim.id, model: values });
+                if (context._key) {
+                  update({ id: context.id, model: values });
                 } else {
-                  createClaim(values);
+                  create(values);
                 }
                 setSubmitting(false);
               }}
@@ -193,6 +215,30 @@ export default function Claims() {
               }) => (
                 <form onSubmit={handleSubmit}>
                   <BoxInput>
+                    <Label
+                      htmlFor={45}
+                      size={500}
+                      display="block"
+                      marginBottom={3}
+                      marginTop={15}
+                    >
+                      Short Name
+                    </Label>
+                    <TextInput
+                      width="100%"
+                      height={45}
+                      name="name"
+                      placeholder="Short Name"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.name}
+                      type="text"
+                      autoFocus
+                      autoComplete={"off"}
+                    />
+                    <MessageError>
+                      {errors.name && touched.name && errors.name}
+                    </MessageError>
                     <Label
                       htmlFor={45}
                       size={500}
@@ -236,6 +282,73 @@ export default function Claims() {
                       type="number"
                       autoComplete={"off"}
                     />
+                    <MessageError>
+                      {errors.desc && touched.desc && errors.desc}
+                    </MessageError>
+                    <Label
+                      htmlFor={45}
+                      size={500}
+                      display="block"
+                      marginBottom={3}
+                      marginTop={15}
+                    >
+                      URL
+                    </Label>
+                    <TextInput
+                      width="100%"
+                      height={45}
+                      name="url"
+                      placeholder="URL"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.url}
+                      type="text"
+                      autoComplete={"off"}
+                    />
+                    <MessageError>
+                      {errors.url && touched.url && errors.url}
+                    </MessageError>
+                    <Label
+                      htmlFor={45}
+                      size={500}
+                      display="block"
+                      marginBottom={3}
+                      marginTop={15}
+                    >
+                      Google KG
+                    </Label>
+                    <TextInput
+                      width="100%"
+                      height={45}
+                      name="mid"
+                      placeholder="Google KG"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.mid}
+                      type="text"
+                      autoComplete={"off"}
+                    />
+                    <Label
+                      htmlFor={45}
+                      size={500}
+                      display="block"
+                      marginBottom={3}
+                      marginTop={15}
+                    >
+                      Wikidata
+                    </Label>
+                    <TextInput
+                      width="100%"
+                      height={45}
+                      name="qid"
+                      placeholder="Wikidata"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.qid}
+                      type="text"
+                      autoComplete={"off"}
+                    />
+
                     <ButtonCenter
                       height={44}
                       marginTop={20}

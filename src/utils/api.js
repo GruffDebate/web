@@ -32,7 +32,7 @@ api.interceptors.request.use(
           config.headers.Authorization = `Bearer ${get(auth, "token", false)}`;
         } else {
           if (
-            window.location.pathname.includes("claims")
+            window.location.pathname.includes("claims") ||  window.location.pathname.includes("contextx")
           ) {
             window.location.href = '/'
           }
@@ -54,16 +54,19 @@ api.interceptors.response.use(
     if (error.response) {
       if (error.response.status === 401 || error.response.status === 403) {
         if (
-          window.location.pathname.includes("claims")
+          window.location.pathname.includes("claims") ||  window.location.pathname.includes("contextx")
         ) {
           toaster.danger("Session expired", { duration: 5 });
           localStorage.removeItem("gruff_auth");
           window.location.href = '/'
+        } else {
+          toaster.danger("Session expired", { duration: 5 });
+          localStorage.removeItem("gruff_auth");
         }
       }
     } else {
       if (
-        window.location.pathname.includes("claims")
+        window.location.pathname.includes("claims") ||  window.location.pathname.includes("contextx")
       ) {
         localStorage.removeItem("gruff_auth");
         window.location.href = '/'

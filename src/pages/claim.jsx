@@ -4,6 +4,7 @@ import { useStore, useActions } from "../configureStore";
 import { IconButton } from 'evergreen-ui';
 import { navigate } from "gatsby";
 import Layout from '../components/layout'
+import SEO from '../components/seo'
 
 import SideSheetClaim from '../components/Claim/SideSheetClaim'
 
@@ -29,6 +30,7 @@ export default function Claim(props) {
 
   return (
     <Layout>
+      <SEO title={claim.title} description={claim.description} />
       <SideSheetClaim type={type} />
       <Container>
         <ClaimContainer>

@@ -4,6 +4,7 @@ import { useStore, useActions } from "../configureStore";
 import { TabNavigation, Tab, Pane } from 'evergreen-ui';
 import Layout from '../components/layout'
 import Card from "../components/Home/Card";
+import SEO from "../components/seo"
 
 const Home = () => {
   const listClaims = useActions(actions => actions.home.listClaims);
@@ -18,6 +19,7 @@ const Home = () => {
 
   return (
     <Layout>
+      <SEO />
       <Container>
         <TabNavigation marginBottom={20}>
           {tabs.map((tab, index) => (
