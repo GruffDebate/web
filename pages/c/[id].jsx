@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useStore, useActions } from '../lib/store'
+import { useStore, useActions } from '../../lib/store'
 import { IconButton } from 'evergreen-ui'
 import Router, { useRouter } from 'next/router'
-import Layout from '../components/layout'
-import SEO from '../components/seo'
+import Layout from '../../components/layout'
+import SEO from '../../components/seo'
 
-import SideSheetClaim from '../components/Claim/SideSheetClaim'
+import SideSheetClaim from '../../components/Claim/SideSheetClaim'
 
 export default function Claim(props) {
   const getClaim = useActions((actions) => actions.claim.getClaim)

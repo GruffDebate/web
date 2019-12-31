@@ -47,7 +47,8 @@
     "gruff"
   ],
   "scripts": {
-    "dev": "node server.js",
+    "dev-server": "node server.js",
+    "dev": "next",
     "build": "next build",
     "start": "next start",
     "deploy": "yarn build && next export",
