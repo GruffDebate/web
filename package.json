@@ -26,7 +26,8 @@
     "react-paginate": "^6.3.2",
     "styled-components": "^4.4.1",
     "styled-tools": "^1.7.1",
-    "cross-env": "^6.0.3"
+    "cross-env": "^6.0.3",
+    "redux-devtools-extension": "^2.13.8"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
@@ -41,7 +42,6 @@
     "husky": "^3.1.0",
     "lint-staged": "^9.5.0",
     "prettier": "^1.19.1",
-    "redux-devtools-extension": "^2.13.8",
     "url-loader": "^3.0.0"
   },
   "keywords": [
