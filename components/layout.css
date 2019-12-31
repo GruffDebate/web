@@ -1,21 +1,21 @@
 @font-face{ 
   font-family: "Larsseit"; 
-  src: url(/public/font/Larsseit.otf); 
+  src: url(/font/Larsseit.otf); 
 }
 
 @font-face{ 
   font-family: "LarsseitLight"; 
-  src: url(/public/font/Larsseit-Light.otf); 
+  src: url(/font/Larsseit-Light.otf); 
 }
 
 @font-face{ 
   font-family: "LarsseitThin"; 
-  src: url(/public/font/Larsseit-Thin.otf); 
+  src: url(/font/Larsseit-Thin.otf); 
 }
 
 @font-face{ 
   font-family: "LarsseitBold"; 
-  src: url(/public/font/Larsseit-Bold.otf); 
+  src: url(/font/Larsseit-Bold.otf); 
 }
 
 body {

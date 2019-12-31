@@ -26,4 +26,5 @@ module.exports = withCss({
     ACCESS_KEY: process.env.ACCESS_KEY,
     SECRET_KEY: process.env.SECRET_KEY,
   },
+  target: 'server',
 })
