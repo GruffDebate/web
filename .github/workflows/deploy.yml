@@ -31,8 +31,7 @@ jobs:
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
-      if: job.status == 'success'
-      run: |+
+    - run: |+
           cat >~/.netrc <<EOF
           machine api.heroku.com
               login $HEROKU_EMAIL
@@ -41,6 +40,6 @@ jobs:
               login $HEROKU_EMAIL
               password $HEROKU_API_KEY
           EOF
-      run: heroku git:remote -a $(basename ${{ github.repository }} )
-      run: git push heroku HEAD:refs/heads/master
+    - run: heroku git:remote -a $(basename ${{ github.repository }} )
+    - run: git push heroku HEAD:refs/heads/master
 
