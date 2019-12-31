@@ -27,11 +27,12 @@ jobs:
         ASSETS_BUCKET_NAME: ${{ secrets.ASSETS_BUCKET_NAME }}
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}  
         SECRET_KEY: ${{ secrets.SECRET_KEY }} 
-    - name: Deploy to Heroku  
+    - name: Heroku Env
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
-    - run: |+
+      if: job.status == 'success'
+      run: |+
           cat >~/.netrc <<EOF
           machine api.heroku.com
               login $HEROKU_EMAIL
@@ -40,6 +41,8 @@ jobs:
               login $HEROKU_EMAIL
               password $HEROKU_API_KEY
           EOF
-    - run: heroku git:remote -a $(basename ${{ github.repository }} )
-    - run: git push heroku HEAD:refs/heads/master
+    - name: Heroku Name
+      run: heroku git:remote -a $(basename ${{ github.repository }} )
+    - name: Heroku Push
+      run: git push heroku HEAD:refs/heads/master
 
