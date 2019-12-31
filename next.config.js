@@ -2,11 +2,7 @@ const path = require('path')
 
 const dev = process.env.NODE_ENV !== 'production'
 
-if (dev) {
-  require('dotenv').config()
-} else {
-  require('dotenv').config({ path: path.resolve(__dirname, '.env.production') })
-}
+require('dotenv').config({ path: path.resolve(__dirname, dev ? `.env` : '.env.production') })
 
 const withCss = require('@zeit/next-css')
 

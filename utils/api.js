@@ -84,6 +84,8 @@ api.interceptors.response.use(
 )
 
 export const request = (req) => {
+  console.log(process.env.API_URL)
+  console.log(process.env)
   return api({
     url: `${process.env.API_URL}/${req.baseUrl}/${req.route}`,
     data: req.payload || null,
