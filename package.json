@@ -25,7 +25,8 @@
     "react-helmet": "^5.2.1",
     "react-paginate": "^6.3.2",
     "styled-components": "^4.4.1",
-    "styled-tools": "^1.7.1"
+    "styled-tools": "^1.7.1",
+    "cross-env": "^6.0.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
@@ -47,10 +48,9 @@
     "gruff"
   ],
   "scripts": {
-    "dev-server": "node server.js",
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "cross-env NODE_ENV=production node server.js",
     "deploy": "yarn build && next export",
     "precommit": "yarn lint-staged"
   },
