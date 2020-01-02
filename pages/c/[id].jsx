@@ -17,13 +17,17 @@ export default function Claim(props) {
 
   const [type, setType] = useState('')
 
+  const getUUID = () => {
+    return router.query.id.split('__')[1]
+  }
+
   useEffect(() => {
-    getClaim({ id: router.query.id, show: false })
+    getClaim({ id: getUUID(), show: false })
   }, [])
 
   useEffect(() => {
     if (!isShow) {
-      getClaim({ id: router.query.id, show: false })
+      getClaim({ id: getUUID(), show: false })
     }
   }, [isShow])
 
@@ -32,6 +36,17 @@ export default function Claim(props) {
       <SEO title={claim.title} description={claim.description} />
       <SideSheetClaim type={type} />
       <Container>
+        <CardShape>
+          <CardPosition>
+            <CardImage>
+              {claim.img ? (
+                <img src={`${process.env.ASSETS_BUCKET}/claims/${claim.img}`} alt={claim.title} />
+              ) : (
+                <div></div>
+              )}
+            </CardImage>
+          </CardPosition>
+        </CardShape>
         <ClaimContainer>
           <ClaimBody>
             <ClaimHeader>Truth: {claim.truth}</ClaimHeader>
@@ -296,5 +311,52 @@ const ArgumentBox = styled.div`
 
   &:first-child {
     border-right: 1px solid #eee;
+  }
+`
+
+const CardShape = styled.div`
+  position: relative;
+`
+
+const CardPosition = styled.div`
+  transition: color 0.2s;
+  color: #2c343d;
+  flex-direction: column;
+  display: flex;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:after {
+    background: linear-gradient(0deg, transparent, rgba(0, 0, 0, 0.5));
+    content: '';
+    position: absolute;
+    top: auto;
+    left: 0;
+    right: 0;
+    height: 1.5em;
+  }
+`
+
+const CardImage = styled.div`
+  flex: none;
+  position: relative;
+  background-color: #a9b0b8;
+  cursor: pointer;
+
+  > img {
+    height: 204px;
+    width: 100%;
+    display: block;
+    font-family: 'object-fit:cover';
+    object-fit: cover;
+  }
+
+  > div {
+    height: 20px;
+    width: 100%;
+    display: block;
   }
 `

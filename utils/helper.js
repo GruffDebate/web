@@ -31,3 +31,14 @@ export const isCurator = () => {
 
   return 0
 }
+
+export const cleanUrl = (str) => {
+  return (
+    str &&
+    str
+      .replace(/ /g, '-')
+      .toLowerCase()
+      .replace('/', '')
+      .replace('__', '-')
+  )
+}

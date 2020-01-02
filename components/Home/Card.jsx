@@ -1,41 +1,45 @@
 import React from 'react'
 import styled from 'styled-components'
 import { distanceInWordsToNow } from 'date-fns'
+import Link from 'next/link'
 
 import UserEmpty from '../../public/images/user-empty.png'
+import { cleanUrl } from '../../utils/helper'
 
 const Card = (props) => {
   return (
-    <Container href={`/c/${props.id}`}>
-      <CardShape>
-        <CardPosition>
-          <CardImage>
-            {props.img ? (
-              <img src={`${process.env.ASSETS_BUCKET}/claims/${props.img}`} alt={props.title} />
-            ) : (
-              <div></div>
-            )}
-          </CardImage>
-          <CardBox hasImg={Boolean(props.img)}>
-            {props.title.length > 223 ? props.title.concat('...') : props.title}
-          </CardBox>
-          <CardDescription>{props.description}</CardDescription>
-        </CardPosition>
-      </CardShape>
-      <CardAnnotation>
-        <AnnotationLatest>
-          <AccountAvatar>
-            <AvatarImage>
-              <img src={UserEmpty} alt="User avatar" />
-            </AvatarImage>
-          </AccountAvatar>
-          <LastText>
-            {props.creator.split('users/')[1] ? props.creator.split('users/')[1] : 'anonymous'}
-          </LastText>
-        </AnnotationLatest>
-        <AnnotationTime>{distanceInWordsToNow(props.mod)}</AnnotationTime>
-      </CardAnnotation>
-    </Container>
+    <Link as={`/c/${cleanUrl(props.title)}__${props.id}`} href={`/c?id=${props.id}`}>
+      <Container>
+        <CardShape>
+          <CardPosition>
+            <CardImage>
+              {props.img ? (
+                <img src={`${process.env.ASSETS_BUCKET}/claims/${props.img}`} alt={props.title} />
+              ) : (
+                <div></div>
+              )}
+            </CardImage>
+            <CardBox hasImg={Boolean(props.img)}>
+              {props.title.length > 223 ? props.title.concat('...') : props.title}
+            </CardBox>
+            <CardDescription>{props.desc}</CardDescription>
+          </CardPosition>
+        </CardShape>
+        <CardAnnotation>
+          <AnnotationLatest>
+            <AccountAvatar>
+              <AvatarImage>
+                <img src={UserEmpty} alt="User avatar" />
+              </AvatarImage>
+            </AccountAvatar>
+            <LastText>
+              {props.creator.split('users/')[1] ? props.creator.split('users/')[1] : 'anonymous'}
+            </LastText>
+          </AnnotationLatest>
+          <AnnotationTime>{distanceInWordsToNow(props.date)}</AnnotationTime>
+        </CardAnnotation>
+      </Container>
+    </Link>
   )
 }
 
@@ -118,6 +122,8 @@ const CardBox = styled.label`
 const CardDescription = styled.p`
   margin: 0;
   padding: 0px 24px;
+  padding-top: 10px;
+  font-size: 0.85rem;
   line-height: 1.2;
 `
 

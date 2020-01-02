@@ -4,6 +4,7 @@ import { useStore, useActions } from '../lib/store'
 import { TabNavigation, Tab, Pane } from 'evergreen-ui'
 import Layout from '../components/layout'
 import Card from '../components/Home/Card'
+import { BoxCards } from '../components/UI'
 import SEO from '../components/seo'
 
 const Home = () => {
@@ -58,7 +59,7 @@ const Home = () => {
                       desc={item.desc}
                       img={item.img}
                       creator={item.creator}
-                      mod={item.mod}
+                      date={item.start}
                     />
                   ))}
               </BoxCards>
@@ -73,7 +74,7 @@ const Home = () => {
                       desc={item.desc}
                       img={item.img}
                       creator={item.creator}
-                      mod={item.mod}
+                      date={item.start}
                     />
                   ))}
               </BoxCards>
@@ -89,20 +90,6 @@ export default Home
 
 const Container = styled.div`
   padding: 2em 1em;
-`
-
-//cards
-const BoxCards = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 20px;
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr 1fr;
-  }
-  @media (max-width: 500px) {
-    grid-template-columns: 1fr;
-  }
 `
 
 const HeaderTab = styled.div`

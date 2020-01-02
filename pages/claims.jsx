@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Formik } from 'formik'
 import {
   Dialog,
-  Table,
   IconButton,
   Button,
   SideSheet,
@@ -17,12 +16,13 @@ import {
   toaster,
 } from 'evergreen-ui'
 import Dropzone from 'react-dropzone'
-import { format } from 'date-fns'
 import { useStore, useActions } from '../lib/store'
 import { theme } from '../lib/theme'
 import Layout from '../components/layout'
 import { isBrowser } from '../utils/helper'
 import { Upload } from '../utils/upload'
+import Card from '../components/Home/Card'
+import { BoxCards } from '../components/UI'
 
 export default function Claims() {
   const isLoadingForm = useStore((state) => state.claim.isLoadingForm)
@@ -89,8 +89,7 @@ export default function Claims() {
         <BoxTable>
           <Button
             height={40}
-            marginLeft={15}
-            marginBottom={15}
+            marginBottom={30}
             marginTop={15}
             appearance="primary"
             intent="success"
@@ -102,58 +101,48 @@ export default function Claims() {
           >
             New claim
           </Button>
-          <NewTable>
-            <Table.Head>
-              <Table.TextHeaderCell>CreatedAt</Table.TextHeaderCell>
-              <Table.TextHeaderCell>Image</Table.TextHeaderCell>
-              <Table.TextHeaderCell>ID</Table.TextHeaderCell>
-              <Table.TextHeaderCell>Title</Table.TextHeaderCell>
-              <Table.TextHeaderCell>Description</Table.TextHeaderCell>
-              <Table.TextHeaderCell>Actions</Table.TextHeaderCell>
-            </Table.Head>
-            <Table.VirtualBody height={400}>
-              {claims && claims.length > 0 ? (
-                claims.map((item, idx) => (
-                  <Table.Row key={idx}>
-                    <Table.TextCell>{format(new Date(item.start), 'YYYY-MM-DD')}</Table.TextCell>
-                    <Table.TextCell>
-                      {item.img && (
-                        <img
-                          width="45"
-                          src={`${process.env.ASSETS_BUCKET}/claims/${item.img}`}
-                          alt={item.title}
-                        />
-                      )}
-                    </Table.TextCell>
-                    <Table.TextCell>{item.id}</Table.TextCell>
-                    <Table.TextCell>{item.title}</Table.TextCell>
-                    <Table.TextCell>{item.desc}</Table.TextCell>
-                    <Table.Cell>
-                      <Pane display="flex" flexDirection="row">
-                        <IconButton
-                          icon="edit"
-                          marginRight={10}
-                          onClick={() => getClaim({ id: item.id, show: true })}
-                        />
-                        <IconButton
-                          icon="trash"
-                          intent="danger"
-                          onClick={() => {
-                            setDeleteItem(item)
-                            setShowDelete(true)
-                          }}
-                        />
-                      </Pane>
-                    </Table.Cell>
-                  </Table.Row>
-                ))
-              ) : (
-                <EmptyState>
-                  <p>You have no claims.</p>
-                </EmptyState>
-              )}
-            </Table.VirtualBody>
-          </NewTable>
+
+          {claims && claims.length > 0 ? (
+            <BoxCards>
+              {claims.map((item, idx) => (
+                <Pane key={idx} display="flex" flexDirection="column">
+                  <Pane
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="flex-end"
+                    backgroundColor="#fff"
+                    padding="10px"
+                  >
+                    <IconButton
+                      icon="edit"
+                      marginRight={10}
+                      onClick={() => getClaim({ id: item.id, show: true })}
+                    />
+                    <IconButton
+                      icon="trash"
+                      intent="danger"
+                      onClick={() => {
+                        setDeleteItem(item)
+                        setShowDelete(true)
+                      }}
+                    />
+                  </Pane>
+                  <Card
+                    id={item.id}
+                    title={item.title}
+                    desc={item.desc}
+                    img={item.img}
+                    creator={item.creator}
+                    date={item.start}
+                  />
+                </Pane>
+              ))}
+            </BoxCards>
+          ) : (
+            <EmptyState>
+              <p>You have no claims.</p>
+            </EmptyState>
+          )}
         </BoxTable>
         <SideSheet
           isShown={isShow}
@@ -353,22 +342,10 @@ const MessageError = styled.span`
 `
 
 const BoxTable = styled.div`
-  margin-right: 1.5em;
-  background: #fff;
-  border-radius: 0.6em;
-  box-shadow: 0 0 1rem 0 rgba(136, 152, 170, 0.15);
-  height: 580px;
   @media (max-width: 1200px) {
     width: 100%;
     margin-right: 0;
     margin-bottom: 1.5em;
-  }
-`
-
-const NewTable = styled(Table)`
-  width: 100%;
-  @media (max-width: 600px) {
-    width: 450px;
   }
 `
 
@@ -378,7 +355,7 @@ const EmptyState = styled.div`
   justify-content: center;
   margin-top: 2em;
   > p {
-    font-size: 1.2em;
+    font-size: 1.8em;
     color: #333;
   }
 `
