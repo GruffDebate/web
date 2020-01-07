@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Formik } from 'formik'
+import Router from 'next/router'
 import {
   Dialog,
   IconButton,
@@ -308,6 +309,9 @@ export default function Claims() {
                         {contextNames || `Select contexts...`}
                       </Button>
                     </SelectMenu>
+                    <NewContext onClick={() => Router.push('/contexts')}>
+                      Create new context?
+                    </NewContext>
                     <ButtonCenter
                       height={44}
                       marginTop={20}
@@ -405,4 +409,10 @@ const SectionGallery = styled.div`
   img {
     margin: 20px 10px;
   }
+`
+
+const NewContext = styled.a`
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 0.5rem;
 `

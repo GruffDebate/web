@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import Link from 'next/link'
 import { useStore, useActions } from '../../lib/store'
 import { IconButton } from 'evergreen-ui'
 import Router, { useRouter } from 'next/router'
 import Layout from '../../components/layout'
 import SEO from '../../components/seo'
+import { cleanUrl } from '../../utils/helper'
 
 import SideSheetClaim from '../../components/Claim/SideSheetClaim'
 
@@ -23,7 +25,7 @@ export default function Claim(props) {
 
   useEffect(() => {
     getClaim({ id: getUUID(), show: false })
-  }, [])
+  }, [router.query])
 
   useEffect(() => {
     if (!isShow) {
@@ -105,24 +107,32 @@ export default function Claim(props) {
 
 const Premise = ({ data }) =>
   data.map((item, idx) => (
-    <PremiseContainer key={idx} onClick={() => Router.push(`/c/${item.id}`)}>
-      <PremiseBody>
-        <h4>{item.title}</h4>
-        <h5>{item.desc}</h5>
-      </PremiseBody>
-    </PremiseContainer>
+    <Link key={idx} as={`/c/${cleanUrl(item.title)}__${item.id}`} href={`/c?id=${item.id}`}>
+      <PremiseContainer>
+        <PremiseBody>
+          <h4>{item.title}</h4>
+          <h5>{item.desc}</h5>
+        </PremiseBody>
+      </PremiseContainer>
+    </Link>
   ))
 
 const Arguments = ({ data, type }) =>
   data.length > 0 ? (
     data.map((item, idx) => (
-      <ArgumentContainer key={idx} type={type} onClick={() => Router.push(`/c/${item.claimId}`)}>
-        <ArgumentHeader>relevance: {item.relevance}</ArgumentHeader>
-        <ArgumentHeader>strength: {item.strength}</ArgumentHeader>
-        <ArgumentBody>
-          <h3>{!item.title ? item.claim.title : item.title}</h3>
-        </ArgumentBody>
-      </ArgumentContainer>
+      <Link
+        key={idx}
+        as={`/c/${cleanUrl(item.title)}__${item.claimId}`}
+        href={`/c?id=${item.claimId}`}
+      >
+        <ArgumentContainer type={type}>
+          <ArgumentHeader>relevance: {item.relevance}</ArgumentHeader>
+          <ArgumentHeader>strength: {item.strength}</ArgumentHeader>
+          <ArgumentBody>
+            <h3>{!item.title ? item.claim.title : item.title}</h3>
+          </ArgumentBody>
+        </ArgumentContainer>
+      </Link>
     ))
   ) : (
     <ArgumentEmpty type={type}>

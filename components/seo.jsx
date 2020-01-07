@@ -11,8 +11,7 @@ function SEO({ description, lang, meta, keywords, title, image, url }) {
       htmlAttributes={{
         lang,
       }}
-      title={metaTitle}
-      titleTemplate={`%s | ${metaTitle}`}
+      title={metaTitle + ' | Gruff'}
       meta={[
         {
           name: `description`,
@@ -36,7 +35,7 @@ function SEO({ description, lang, meta, keywords, title, image, url }) {
         },
         {
           property: `og:title`,
-          content: title,
+          content: title + ' | Gruff',
         },
         {
           property: `og:description`,
