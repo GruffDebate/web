@@ -36,9 +36,20 @@ export const cleanUrl = (str) => {
   return (
     str &&
     str
-      .replace(/ /g, '-')
+      .split(/ /g)
+      .join('-')
       .toLowerCase()
-      .replace('/', '')
-      .replace('__', '-')
+      .split('/')
+      .join('')
+      .split('?')
+      .join('')
+      .split('!')
+      .join('')
+      .split('#')
+      .join('')
+      .split('&')
+      .join('')
+      .split('__')
+      .join('-')
   )
 }

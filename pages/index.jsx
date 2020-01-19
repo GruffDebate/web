@@ -20,7 +20,7 @@ const Home = () => {
 
   return (
     <Layout>
-      <SEO />
+      <SEO title="Home" />
       <Container>
         <TabNavigation marginBottom={20}>
           {tabs.map((tab, index) => (
