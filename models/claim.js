@@ -1,5 +1,12 @@
 import { thunk, action } from 'easy-peasy'
-import { ListClaims, GetClaim, CreateClaim, UpdateClaim, DeleteClaim } from '../services/claim'
+import {
+  ListClaims,
+  GetClaim,
+  GetClaimParents,
+  CreateClaim,
+  UpdateClaim,
+  DeleteClaim,
+} from '../services/claim'
 import { get } from 'lodash'
 import { toaster } from 'evergreen-ui'
 
@@ -16,6 +23,7 @@ const claim = {
     img: '',
     contexts: [],
   },
+  parents: [],
   listClaims: thunk(async (action, payload) => {
     try {
       const response = await ListClaims()
@@ -36,6 +44,16 @@ const claim = {
     } catch (error) {
       action.setError({
         message: 'There was an error loading claims.',
+      })
+    }
+  }),
+  getClaimParents: thunk(async (action, payload) => {
+    try {
+      const response = await GetClaimParents(payload.id)
+      action.setClaimParents(response.data)
+    } catch (error) {
+      action.setError({
+        message: 'There was an error loading the parent arguments.',
       })
     }
   }),
@@ -94,6 +112,9 @@ const claim = {
       payload.contexts = payload.contexts.map((item) => item._key)
     }
     state.claim = payload || {}
+  }),
+  setClaimParents: action((state, payload) => {
+    state.parents = payload || []
   }),
   setLoadingForm: action((state, payload) => {
     const loading = get(payload, 'loading', false)

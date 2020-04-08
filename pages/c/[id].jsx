@@ -12,7 +12,9 @@ import SideSheetClaim from '../../components/Claim/SideSheetClaim'
 
 export default function Claim(props) {
   const getClaim = useActions((actions) => actions.claim.getClaim)
+  const getClaimParents = useActions((actions) => actions.claim.getClaimParents)
   const claim = useStore((store) => store.claim.claim)
+  const claimParents = useStore((store) => store.claim.parents)
   const isShow = useStore((state) => state.argument.isShow)
   const setShow = useActions((action) => action.argument.setShow)
   const router = useRouter()
@@ -25,6 +27,7 @@ export default function Claim(props) {
 
   useEffect(() => {
     getClaim({ id: getUUID(), show: false })
+    getClaimParents({ id: getUUID() })
   }, [router.query])
 
   useEffect(() => {
@@ -32,6 +35,8 @@ export default function Claim(props) {
       getClaim({ id: getUUID(), show: false })
     }
   }, [isShow])
+
+  console.log(claimParents) 
 
   return (
     <Layout>
@@ -49,6 +54,13 @@ export default function Claim(props) {
             </CardImage>
           </CardPosition>
         </CardShape>
+        {claimParents && (
+          <>
+            <ClaimArgumentList>
+              <Parent data={claimParents ? claimParents : []}></Parent>
+            </ClaimArgumentList>
+          </>
+        )}
         <ClaimContainer>
           <ClaimBody>
             <ClaimHeader>Truth: {claim.truth}</ClaimHeader>
@@ -105,6 +117,17 @@ export default function Claim(props) {
   )
 }
 
+const Parent = ({ data }) =>
+  data.map((item, idx) => (
+    <Link
+      key={idx}
+      as={`/c/${cleanUrl(item.targetClaim ? item.targetClaim.title : item.targetArg.title)}__${item.targetClaimId ? item.targetClaimId : item.targetArgId}`}
+      href={`/c?id=${item.targetClaimId ? item.targetClaimId : item.targetArgId}`}
+    >
+      <h3>{item.title ? item.title : (item.targetClaim ? item.targetClaim.title : item.targetArg.title)}</h3>
+    </Link>
+  ))
+
 const Premise = ({ data }) =>
   data.map((item, idx) => (
     <Link key={idx} as={`/c/${cleanUrl(item.title)}__${item.id}`} href={`/c?id=${item.id}`}>
@@ -136,7 +159,11 @@ const Arguments = ({ data, type }) =>
     ))
   ) : (
     <ArgumentEmpty type={type}>
-      <EmptyTitle>Be the first to make a {type} argument</EmptyTitle>
+      {type === 'pro' ? (
+        <EmptyTitle>Be the first to make a supporting argument</EmptyTitle>
+      ) : (
+        <EmptyTitle>Be the first to make an argument against this claim</EmptyTitle>
+      )}
     </ArgumentEmpty>
   )
 

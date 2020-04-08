@@ -16,6 +16,14 @@ export const GetClaim = (id) => {
   })
 }
 
+export const GetClaimParents = (id) => {
+  return request({
+    method: 'get',
+    baseUrl: 'api',
+    route: `claims/${id}/parents`,
+  })
+}
+
 export const CreateClaim = (payload) => {
   return request({
     method: 'post',

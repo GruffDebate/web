@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "author": "Bruno Sato <bruno.sato@live.com>",
   "dependencies": {
+    "@babel/core": "^7.9.0",
     "@zeit/next-css": "^1.0.1",
     "aws-sdk": "^2.596.0",
     "axios": "^0.19.0",
@@ -39,11 +40,12 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.17.0",
-    "husky": "^3.1.0",
-    "lint-staged": "^9.5.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.2",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
-    "url-loader": "^3.0.0"
+    "url-loader": "^3.0.0",
+    "webpack": "^4.42.1"
   },
   "keywords": [
     "gruff"
@@ -52,8 +54,7 @@
     "dev": "nodemon server.js",
     "build": "next build",
     "start": "cross-env NODE_ENV=production node server.js",
-    "deploy": "yarn build && next export",
-    "precommit": "yarn lint-staged"
+    "deploy": "npm run build && next export"
   },
   "lint-staged": {
     "*.{js,ts}": [
@@ -64,11 +65,12 @@
     "*.{jsx,tsx,json}|*rc|*config": [
       "prettier --write",
       "git add"
-    ]
+    ],
+    "*.js": "eslint --cache --fix"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn precommit"
+      "pre-commit": "lint-staged"
     }
   }
 }

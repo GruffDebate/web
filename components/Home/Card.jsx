@@ -26,16 +26,7 @@ const Card = (props) => {
           </CardPosition>
         </CardShape>
         <CardAnnotation>
-          <AnnotationLatest>
-            <AccountAvatar>
-              <AvatarImage>
-                <img src={UserEmpty} alt="User avatar" />
-              </AvatarImage>
-            </AccountAvatar>
-            <LastText>
-              {props.creator.split('users/')[1] ? props.creator.split('users/')[1] : 'anonymous'}
-            </LastText>
-          </AnnotationLatest>
+          <AnnotationLatest></AnnotationLatest>
           <AnnotationTime>{distanceInWordsToNow(props.date)}</AnnotationTime>
         </CardAnnotation>
       </Container>
