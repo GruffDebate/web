@@ -53,7 +53,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production node server.js",
+    "start": "npm run build && cross-env NODE_ENV=production node server.js",
     "deploy": "npm run build && next export"
   },
   "lint-staged": {
