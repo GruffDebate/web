@@ -56,7 +56,8 @@
   "scripts": {
     "dev": "nodemon server.js",
     "build": "next build",
-    "start": "npm run build && cross-env NODE_ENV=production node server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
+    "heroku-postbuild": "npm run build",
     "deploy": "npm run build && next export"
   },
   "lint-staged": {
