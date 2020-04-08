@@ -50,6 +50,9 @@
   "keywords": [
     "gruff"
   ],
+  "engines": {
+    "node": "13.x"
+  },
   "scripts": {
     "dev": "nodemon server.js",
     "build": "next build",
