@@ -36,8 +36,6 @@ export default function Claim(props) {
     }
   }, [isShow])
 
-  console.log(claimParents) 
-
   return (
     <Layout>
       <SEO title={claim.title} description={claim.description} />
