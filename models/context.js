@@ -1,6 +1,7 @@
 import { thunk, action } from 'easy-peasy'
 import {
   ListContext,
+  FilterContext,
   GetContext,
   CreateContext,
   UpdateContext,
@@ -30,6 +31,16 @@ const context = {
     } catch (error) {
       action.setError({
         message: 'There was an error loading contexts.',
+      })
+    }
+  }),
+  filter: thunk(async (action, payload) => {
+    try {
+      const response = await FilterContext(payload.search)
+      action.setList(response.data)
+    } catch (error) {
+      action.setError({
+        message: 'There was an error querying contexts.',
       })
     }
   }),

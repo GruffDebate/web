@@ -8,6 +8,14 @@ export const ListContext = () => {
   })
 }
 
+export const FilterContext = (search) => {
+  return request({
+    method: 'get',
+    baseUrl: 'api',
+    route: `contexts/search?query=${search}`,
+  })
+}
+
 export const GetContext = (id) => {
   return request({
     method: 'get',

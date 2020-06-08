@@ -14,6 +14,7 @@ import {
 } from 'evergreen-ui'
 import { isBrowser } from '../../utils/helper'
 import { theme } from '../../lib/theme'
+import ContextSelect from '../Context/ContextSelect'
 
 const SideSheetClaim = (props) => {
   const isShow = useStore((state) => state.argument.isShow)
@@ -103,6 +104,10 @@ const SideSheetClaim = (props) => {
                   type="number"
                   autoComplete={'off'}
                 />
+                <Label htmlFor={45} size={500} display="block" marginBottom={3} marginTop={15}>
+                  Context
+                </Label>
+                <ContextSelect />
                 <ButtonCenter
                   height={44}
                   marginTop={20}
