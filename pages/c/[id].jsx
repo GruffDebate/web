@@ -2,15 +2,21 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import { useStore, useActions } from '../../lib/store'
-import { IconButton } from 'evergreen-ui'
+import {
+  IconButton,
+  Dialog,
+  Pane,
+} from 'evergreen-ui'
 import Router, { useRouter } from 'next/router'
 import Layout from '../../components/layout'
 import SEO from '../../components/seo'
 import { cleanUrl } from '../../utils/helper'
+import { isCurator } from '../../utils/helper'
 
 import SideSheetClaim from '../../components/Claim/SideSheetClaim'
 
 export default function Claim(props) {
+  const user = useStore((store) => store.auth.user)
   const getClaim = useActions((actions) => actions.claim.getClaim)
   const getClaimParents = useActions((actions) => actions.claim.getClaimParents)
   const claim = useStore((store) => store.claim.claim)
@@ -18,6 +24,11 @@ export default function Claim(props) {
   const isShow = useStore((state) => state.argument.isShow)
   const setShow = useActions((action) => action.argument.setShow)
   const router = useRouter()
+  const isLoadingDelete = useStore((state) => state.claim.isLoadingDelete)
+  const [showDelete, setShowDelete] = useState(false)
+  const [deleteItem, setDeleteItem] = useState({})
+  const updateClaim = useActions((actions) => actions.claim.updateClaim)
+  const deleteClaim = useActions((actions) => actions.claim.deleteClaim)
 
   const [type, setType] = useState('')
 
@@ -36,11 +47,32 @@ export default function Claim(props) {
     }
   }, [isShow])
 
+  useEffect(() => {
+    if (!isLoadingDelete && showDelete) {
+      setShowDelete(false)
+      getClaim({ id: getUUID(), show: false })
+    }
+  }, [isLoadingDelete])
+
   return (
     <Layout>
       <SEO title={claim.title} description={claim.description} />
       <SideSheetClaim type={type} />
       <Container>
+        <Dialog
+          isShown={showDelete}
+          title="Delete Claim"
+          onCloseComplete={() => setShowDelete(false)}
+          isConfirmLoading={isLoadingDelete}
+          onConfirm={() => {
+            deleteClaim(deleteItem.id)
+          }}
+          cancelLabel="CANCEL"
+          intent="danger"
+          confirmLabel={isLoadingDelete ? 'DELETING' : 'DELETE'}
+        >
+          Do you really want to delete the Claim <b>{deleteItem.name}</b> ?
+        </Dialog>
         <CardShape>
           <CardPosition>
             <CardImage>
@@ -60,6 +92,31 @@ export default function Claim(props) {
           </>
         )}
         <ClaimContainer>
+ 	  {user && isCurator() && !claim.end && (
+          <Pane key={claim.id} display="flex" flexDirection="column">
+          <Pane
+            display="flex"
+            flexDirection="row"
+            justifyContent="flex-end"
+            backgroundColor="#fff"
+            padding="10px"
+          >
+            <IconButton
+              icon="edit"
+              marginRight={10}
+              onClick={() => getClaim({ id: claim.id, show: true })}
+            />
+            <IconButton
+              icon="trash"
+              intent="danger"
+              onClick={() => {
+                setDeleteItem(claim)
+                setShowDelete(true)
+              }}
+            />
+          </Pane>
+          </Pane>
+  	  )}
           <ClaimBody>
             <ClaimHeader>Truth: {claim.truth}</ClaimHeader>
             <ClaimContent>
