@@ -26,12 +26,14 @@
     "react-dropzone": "^10.2.1",
     "react-helmet": "^5.2.1",
     "react-paginate": "^6.3.2",
+    "react-select": "^3.1.0",
     "redux-devtools-extension": "^2.13.8",
     "styled-components": "^4.4.1",
     "styled-tools": "^1.7.1",
     "webpack": "^4.42.1"
   },
   "devDependencies": {
+    "@types/node": "^14.0.12",
     "babel-eslint": "^10.0.3",
     "babel-plugin-styled-components": "^1.10.6",
     "env-cmd": "^8.0.2",

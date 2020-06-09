@@ -108,6 +108,8 @@ const context = {
   }),
   setList: action((state, payload) => {
     state.contexts = payload.results || []
+    console.log(`----------------setList:`)
+    console.dir(state.contexts)
   }),
   setModel: action((state, payload) => {
     state.context = payload || {}
