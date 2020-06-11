@@ -24,6 +24,8 @@ const SideSheetClaim = (props) => {
   const createArgument = useActions((action) => action.argument.createArgument)
   const claim = useStore((store) => store.claim.claim)
 
+  const [selectData, setSelectData] = useState([])
+
   return (
     <SideSheet
       isShown={isShow}
@@ -67,6 +69,7 @@ const SideSheetClaim = (props) => {
               ...values,
               targetClaimId: claim.id,
               pro: props.type === 'pro' ? true : false,
+              contexts: selectData,
             }
             createArgument(model)
             setSubmitting(false)
@@ -107,7 +110,7 @@ const SideSheetClaim = (props) => {
                 <Label htmlFor={45} size={500} display="block" marginBottom={3} marginTop={15}>
                   Context
                 </Label>
-                <ContextSelect />
+                <ContextSelect selectData={selectData} setSelectData={setSelectData} />
                 <ButtonCenter
                   height={44}
                   marginTop={20}
