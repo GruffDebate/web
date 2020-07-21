@@ -80,8 +80,8 @@ const claim = {
         title: payload.model.title,
         desc: payload.model.desc,
         img: payload.model.img,
-	start: payload.model.start,
-	end: payload.model.end,
+        start: payload.model.start,
+        end: payload.model.end,
         contexts: payload.model.contexts,
         _key: payload.model._key,
       })

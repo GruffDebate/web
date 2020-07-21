@@ -2,29 +2,47 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Formik } from 'formik'
 import { useStore, useActions } from '../../lib/store'
+import Router from 'next/router'
 import {
   Pane,
   TextInput,
   Label,
   Textarea,
   SideSheet,
+  SelectMenu,
   Heading,
   Button,
   Paragraph,
 } from 'evergreen-ui'
+import Dropzone from 'react-dropzone'
 import { isBrowser } from '../../utils/helper'
 import { theme } from '../../lib/theme'
 import ContextSelect from '../Context/ContextSelect'
 
 const SideSheetClaim = (props) => {
-  const isShow = useStore((state) => state.argument.isShow)
-  const setShow = useActions((action) => action.argument.setShow)
-  const isLoadingForm = useStore((state) => state.argument.isLoadingForm)
+  const isShow = useStore((state) => state.claim.isShow)
+  const setShow = useActions((action) => action.claim.setShow)
+  const isLoadingForm = useStore((state) => state.claim.isLoadingForm)
 
-  const createArgument = useActions((action) => action.argument.createArgument)
+  const createClaim = useActions((action) => action.claim.createClaim)
+  const updateClaim = useActions((actions) => actions.claim.updateClaim)
   const claim = useStore((store) => store.claim.claim)
+  const contexts = useStore((state) => state.context.contexts)
+  const listContext = useActions((actions) => actions.context.list)
+
+  const [contextNames, setContextNames] = useState('')
 
   const [selectData, setSelectData] = useState([])
+
+  useEffect(() => {
+    listContext()
+  }, [])
+
+  useEffect(() => {
+    if (claim.contexts) {
+      setContextNames(`${claim.contexts.length} selected`)
+    }
+  }, [claim])
 
   return (
     <SideSheet
@@ -40,10 +58,10 @@ const SideSheetClaim = (props) => {
       <Pane zIndex={1} flexShrink={0} elevation={0} backgroundColor="white">
         <Pane padding={16}>
           <Heading size={600} textAlign={'center'}>
-            Create new argument
+            Create new claim
           </Heading>
           <Paragraph size={400} textAlign={'center'} marginTop={5}>
-            Fill in the fields to create your argument.
+            Fill in the fields to create your claim.
           </Paragraph>
         </Pane>
       </Pane>
@@ -55,28 +73,71 @@ const SideSheetClaim = (props) => {
         )}
         <Formik
           enableReinitialize
-          initialValues={{ title: '', desc: '' }}
+          initialValues={claim}
           validate={(values) => {
             let errors = {}
             if (!values.title) {
               errors.title = 'Required'
             }
-
             return errors
           }}
           onSubmit={(values, { setSubmitting }) => {
-            const model = {
-              ...values,
-              targetClaimId: claim.id,
-              pro: props.type === 'pro' ? true : false,
-              contexts: selectData,
+            let model = { ...values }
+            model.contexts = []
+            if (values.contexts) {
+              for (const item of values.contexts) {
+                const context = contexts.find((obj) => obj._key === item)
+                model.contexts.push(context)
+              }
             }
-            createArgument(model)
+            if (claim._key) {
+              updateClaim({ id: claim.id, model })
+            } else {
+              createClaim(model)
+            }
             setSubmitting(false)
           }}
         >
-          {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            setFieldValue,
+          }) => (
             <form onSubmit={handleSubmit}>
+              <Dropzone
+                onDrop={async (acceptedFiles) => {
+                  if (acceptedFiles.length > 1) {
+                    toaster.warning('Limit 1 image')
+                    return
+                  }
+                  for (const file of acceptedFiles) {
+                    const fileName = await Upload('claims', file)
+                    setFieldValue('img', fileName)
+                  }
+                }}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <SectionGallery>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {!values.img ? (
+                        <p>Select Image</p>
+                      ) : (
+                        <img
+                          src={`${process.env.ASSETS_BUCKET}/claims/${values.img}`}
+                          width="auto"
+                          height="100px"
+                        />
+                      )}
+                    </div>
+                  </SectionGallery>
+                )}
+              </Dropzone>
               <BoxInput>
                 <Label htmlFor={45} size={500} display="block" marginBottom={3} marginTop={15}>
                   Title
@@ -108,9 +169,45 @@ const SideSheetClaim = (props) => {
                   autoComplete={'off'}
                 />
                 <Label htmlFor={45} size={500} display="block" marginBottom={3} marginTop={15}>
-                  Context
+                  Contexts
                 </Label>
-                <ContextSelect selectData={selectData} setSelectData={setSelectData} />
+                <SelectMenu
+                  width={240}
+                  isMultiSelect
+                  title="Select contexts"
+                  filterPlaceholder="Searching..."
+                  options={contexts.map((item) => ({
+                    label: item.name,
+                    value: item._key,
+                  }))}
+                  selected={values.contexts}
+                  onSelect={(item) => {
+                    if (!values.contexts) {
+                      values.contexts = []
+                    }
+                    values.contexts = [...values.contexts, item.value]
+                    if (values.contexts.length > 0) {
+                      setContextNames(`${values.contexts.length} selected`)
+                    } else {
+                      setContextNames('Select contexts')
+                    }
+                  }}
+                  onDeselect={(item) => {
+                    values.contexts = values.contexts.filter((val) => val._key !== item.value._key)
+                    if (values.contexts.length > 0) {
+                      setContextNames(`${values.contexts.length} selected`)
+                    } else {
+                      setContextNames('Select contexts')
+                    }
+                  }}
+                >
+                  <Button type="button" iconAfter="caret-down" height={45} width={'auto'}>
+                    {contextNames || `Select contexts...`}
+                  </Button>
+                </SelectMenu>
+                <NewContext onClick={() => Router.push('/contexts')}>
+                  Create new context?
+                </NewContext>
                 <ButtonCenter
                   height={44}
                   marginTop={20}
@@ -155,4 +252,40 @@ const ButtonCenter = styled(Button)`
     background: ${theme.color.primary} !important;
     opacity: 0.7;
   }
+`
+
+const SectionGallery = styled.div`
+  height: 140px;
+  border: 2px solid #eee;
+  border-style: dashed;
+  text-align: center;
+  cursor: pointer;
+  outline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    width: 100%;
+  }
+
+  p {
+    margin: 0;
+    outline: 0;
+    font-size: 1.2em;
+    height: 130px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  img {
+    margin: 20px 10px;
+  }
+`
+
+const NewContext = styled.a`
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 0.5rem;
 `

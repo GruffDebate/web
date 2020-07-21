@@ -14,6 +14,7 @@ import { cleanUrl } from '../../utils/helper'
 import { isCurator } from '../../utils/helper'
 
 import SideSheetClaim from '../../components/Claim/SideSheetClaim'
+import SideSheetArgument from '../../components/Argument/SideSheetArgument'
 
 export default function Claim(props) {
   const user = useStore((store) => store.auth.user)
@@ -27,7 +28,6 @@ export default function Claim(props) {
   const isLoadingDelete = useStore((state) => state.claim.isLoadingDelete)
   const [showDelete, setShowDelete] = useState(false)
   const [deleteItem, setDeleteItem] = useState({})
-  const updateClaim = useActions((actions) => actions.claim.updateClaim)
   const deleteClaim = useActions((actions) => actions.claim.deleteClaim)
 
   const [type, setType] = useState('')
@@ -43,6 +43,7 @@ export default function Claim(props) {
 
   useEffect(() => {
     if (!isShow) {
+      // TODO: This is redundant with the previous useEffect
       getClaim({ id: getUUID(), show: false })
     }
   }, [isShow])
@@ -57,7 +58,8 @@ export default function Claim(props) {
   return (
     <Layout>
       <SEO title={claim.title} description={claim.description} />
-      <SideSheetClaim type={type} />
+      <SideSheetClaim />
+      <SideSheetArgument type={type} />
       <Container>
         <Dialog
           isShown={showDelete}
@@ -104,7 +106,8 @@ export default function Claim(props) {
             <IconButton
               icon="edit"
               marginRight={10}
-              onClick={() => getClaim({ id: claim.id, show: true })}
+	      onClick={() => getClaim({ id: claim.id, show: true })}
+	      //onClick={() => alert("claim "+claim.id)}
             />
             <IconButton
               icon="trash"
