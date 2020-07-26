@@ -22,13 +22,16 @@ export default function Claim(props) {
   const getClaimParents = useActions((actions) => actions.claim.getClaimParents)
   const claim = useStore((store) => store.claim.claim)
   const claimParents = useStore((store) => store.claim.parents)
-  const isShow = useStore((state) => state.argument.isShow)
-  const setShow = useActions((action) => action.argument.setShow)
+  const isShow = useStore((state) => state.claim.isShow)
+  const setShow = useActions((action) => action.claim.setShow)
+  const isShowArg = useStore((state) => state.argument.isShow)
+  const setShowArg = useActions((action) => action.argument.setShow)
   const router = useRouter()
   const isLoadingDelete = useStore((state) => state.claim.isLoadingDelete)
   const [showDelete, setShowDelete] = useState(false)
   const [deleteItem, setDeleteItem] = useState({})
   const deleteClaim = useActions((actions) => actions.claim.deleteClaim)
+  const listClaims = useActions((actions) => actions.claim.listClaims)
 
   const [type, setType] = useState('')
 
@@ -47,6 +50,13 @@ export default function Claim(props) {
       getClaim({ id: getUUID(), show: false })
     }
   }, [isShow])
+
+  useEffect(() => {
+    if (!isShowArg) {
+      // TODO: This is redundant with the previous useEffect
+      getClaim({ id: getUUID(), show: false })
+    }
+  }, [isShowArg])
 
   useEffect(() => {
     if (!isLoadingDelete && showDelete) {
@@ -145,7 +155,7 @@ export default function Claim(props) {
               intent="success"
               onClick={() => {
                 setType('pro')
-                setShow(true)
+                setShowArg(true)
               }}
             />
           </ArgumentBox>
@@ -157,7 +167,7 @@ export default function Claim(props) {
               intent="danger"
               onClick={() => {
                 setType('cons')
-                setShow(true)
+                setShowArg(true)
               }}
             />
           </ArgumentBox>

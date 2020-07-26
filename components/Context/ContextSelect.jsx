@@ -26,7 +26,9 @@ const ContextSelect = (props) => {
       isMulti
       onChange={(e) => {
         // eslint-disable-next-line react/prop-types
-        props.setSelectData([...props.selectData, ...e])
+        if (e !== null) {
+          props.setSelectData([...props.selectData, ...e])
+        }
       }}
       loadOptions={(e) => getContextsForSelect(e)}
       cacheOptions
