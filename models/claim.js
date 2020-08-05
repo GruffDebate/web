@@ -112,9 +112,9 @@ const claim = {
     state.claims = payload.results || []
   }),
   setClaim: action((state, payload) => {
-    if (payload.contexts) {
-      payload.contexts = payload.contexts.map((item) => item._key)
-    }
+    //if (payload.contexts) {
+    //payload.contexts = payload.contexts.map((item) => item._key)
+    //}
     state.claim = payload || {}
   }),
   setClaimParents: action((state, payload) => {

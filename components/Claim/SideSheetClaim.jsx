@@ -28,19 +28,14 @@ const SideSheetClaim = (props) => {
   const updateClaim = useActions((actions) => actions.claim.updateClaim)
   const claim = useStore((store) => store.claim.claim)
   const contexts = useStore((state) => state.context.contexts)
-  const listContext = useActions((actions) => actions.context.list)
 
   const [contextNames, setContextNames] = useState('')
 
   const [selectData, setSelectData] = useState([])
 
   useEffect(() => {
-    listContext()
-  }, [])
-
-  useEffect(() => {
     if (claim.contexts) {
-      setContextNames(`${claim.contexts.length} selected`)
+      //alert("claim.contexts:"+claim.contexts)
     }
   }, [claim])
 
@@ -83,13 +78,7 @@ const SideSheetClaim = (props) => {
           }}
           onSubmit={(values, { setSubmitting }) => {
             let model = { ...values }
-            model.contexts = []
-            if (values.contexts) {
-              for (const item of values.contexts) {
-                const context = contexts.find((obj) => obj._key === item)
-                model.contexts.push(context)
-              }
-            }
+            model.contexts = selectData
             if (claim._key) {
               updateClaim({ id: claim.id, model })
             } else {
@@ -171,43 +160,11 @@ const SideSheetClaim = (props) => {
                 <Label htmlFor={45} size={500} display="block" marginBottom={3} marginTop={15}>
                   Contexts
                 </Label>
-                <SelectMenu
-                  width={240}
-                  isMultiSelect
-                  title="Select contexts"
-                  filterPlaceholder="Searching..."
-                  options={contexts.map((item) => ({
-                    label: item.name,
-                    value: item._key,
-                  }))}
-                  selected={values.contexts}
-                  onSelect={(item) => {
-                    if (!values.contexts) {
-                      values.contexts = []
-                    }
-                    values.contexts = [...values.contexts, item.value]
-                    if (values.contexts.length > 0) {
-                      setContextNames(`${values.contexts.length} selected`)
-                    } else {
-                      setContextNames('Select contexts')
-                    }
-                  }}
-                  onDeselect={(item) => {
-                    values.contexts = values.contexts.filter((val) => val._key !== item.value._key)
-                    if (values.contexts.length > 0) {
-                      setContextNames(`${values.contexts.length} selected`)
-                    } else {
-                      setContextNames('Select contexts')
-                    }
-                  }}
-                >
-                  <Button type="button" iconAfter="caret-down" height={45} width={'auto'}>
-                    {contextNames || `Select contexts...`}
-                  </Button>
-                </SelectMenu>
-                <NewContext onClick={() => Router.push('/contexts')}>
-                  Create new context?
-                </NewContext>
+                <ContextSelect
+                  selectData={selectData}
+                  setSelectData={setSelectData}
+                  initialData={claim.contexts}
+                />
                 <ButtonCenter
                   height={44}
                   marginTop={20}
