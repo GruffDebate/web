@@ -13,6 +13,7 @@ import SEO from '../../components/seo'
 import { cleanUrl } from '../../utils/helper'
 import { isCurator } from '../../utils/helper'
 
+import ClaimParents from '../../components/Claim/ClaimParents'
 import SideSheetClaim from '../../components/Claim/SideSheetClaim'
 import SideSheetArgument from '../../components/Argument/SideSheetArgument'
 
@@ -96,13 +97,7 @@ export default function Claim(props) {
             </CardImage>
           </CardPosition>
         </CardShape>
-        {claimParents && (
-          <>
-            <ClaimArgumentList>
-              <Parent data={claimParents ? claimParents : []}></Parent>
-            </ClaimArgumentList>
-          </>
-        )}
+	<ClaimParents parents={claimParents} />
         <ClaimContainer>
  	  {user && isCurator() && !claim.end && (
           <Pane key={claim.id} display="flex" flexDirection="column">
@@ -184,17 +179,6 @@ export default function Claim(props) {
     </Layout>
   )
 }
-
-const Parent = ({ data }) =>
-  data.map((item, idx) => (
-    <Link
-      key={idx}
-      as={`/c/${cleanUrl(item.targetClaim ? item.targetClaim.title : item.targetArg.title)}__${item.targetClaimId ? item.targetClaimId : item.targetArgId}`}
-      href={`/c?id=${item.targetClaimId ? item.targetClaimId : item.targetArgId}`}
-    >
-      <h3>{item.title ? item.title : (item.targetClaim ? item.targetClaim.title : item.targetArg.title)}</h3>
-    </Link>
-  ))
 
 const Premise = ({ data }) =>
   data.map((item, idx) => (
