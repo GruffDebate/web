@@ -3,7 +3,7 @@ import AsyncSelect, { makeAsyncSelect } from 'react-select/async'
 import { FilterContext } from '../../services/context'
 
 const ContextSelect = (props) => {
-  const [all, setAll] = useState(props.initialData)
+  const [all, setAll] = useState(props.initialData || [])
   const getContextsForSelect = async (input) => {
     if (input === '') {
       return []
