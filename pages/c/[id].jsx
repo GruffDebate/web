@@ -16,6 +16,7 @@ import { isCurator } from '../../utils/helper'
 import ClaimParents from '../../components/Claim/ClaimParents'
 import SideSheetClaim from '../../components/Claim/SideSheetClaim'
 import SideSheetArgument from '../../components/Argument/SideSheetArgument'
+import ContextList from '../../components/Context/ContextList'
 
 export default function Claim(props) {
   const user = useStore((store) => store.auth.user)
@@ -131,6 +132,7 @@ export default function Claim(props) {
               <h2>{claim.title}</h2>
               <p>{claim.desc}</p>
             </ClaimContent>
+            Context: <ContextList contexts={claim.contexts} />
           </ClaimBody>
         </ClaimContainer>
         {claim.premises && (
