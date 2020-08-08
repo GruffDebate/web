@@ -27,17 +27,10 @@ const SideSheetClaim = (props) => {
   const createClaim = useActions((action) => action.claim.createClaim)
   const updateClaim = useActions((actions) => actions.claim.updateClaim)
   const claim = useStore((store) => store.claim.claim)
-  const contexts = useStore((state) => state.context.contexts)
 
   const [contextNames, setContextNames] = useState('')
 
   const [selectData, setSelectData] = useState([])
-
-  useEffect(() => {
-    if (claim.contexts) {
-      //alert("claim.contexts:"+claim.contexts)
-    }
-  }, [claim])
 
   return (
     <SideSheet

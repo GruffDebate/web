@@ -109,7 +109,11 @@ const SideSheetArgument = (props) => {
                 <Label htmlFor={45} size={500} display="block" marginBottom={3} marginTop={15}>
                   Context
                 </Label>
-                <ContextSelect selectData={selectData} setSelectData={setSelectData} />
+                <ContextSelect
+                  selectData={selectData}
+                  setSelectData={setSelectData}
+                  initialData={claim.contexts}
+                />
                 <ButtonCenter
                   height={44}
                   marginTop={20}
