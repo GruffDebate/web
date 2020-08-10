@@ -9,6 +9,7 @@ import {
 } from '../services/claim'
 import { get } from 'lodash'
 import { toaster } from 'evergreen-ui'
+import { handleRequestError } from '../utils/api'
 
 const claim = {
   isLoading: false,
@@ -31,9 +32,7 @@ const claim = {
       const response = await ListClaims()
       action.setClaims(response.data)
     } catch (error) {
-      action.setError({
-        message: 'There was an error loading claims.',
-      })
+      handleRequestError(error)
     }
   }),
   getClaim: thunk(async (action, payload) => {
@@ -44,9 +43,7 @@ const claim = {
         action.setShow(true)
       }
     } catch (error) {
-      action.setError({
-        message: 'There was an error loading claims.',
-      })
+      handleRequestError(error)
     }
   }),
   getClaimParents: thunk(async (action, payload) => {
@@ -54,9 +51,7 @@ const claim = {
       const response = await GetClaimParents(payload.id)
       action.setClaimParents(response.data)
     } catch (error) {
-      action.setError({
-        message: 'There was an error loading the parent arguments.',
-      })
+      handleRequestError(error)
     }
   }),
   createClaim: thunk(async (action, payload) => {
@@ -66,10 +61,7 @@ const claim = {
       action.setShow(false)
       action.setLoadingForm({ loading: false })
     } catch (error) {
-      toaster.danger('An error occurred while creating a claim.', {
-        duration: 4,
-        id: 'error-save-claim',
-      })
+      handleRequestError(error)
       action.setLoadingForm({ loading: false })
     }
   }),
@@ -88,10 +80,7 @@ const claim = {
       action.setShow(false)
       action.setLoadingForm({ loading: false })
     } catch (error) {
-      toaster.danger('An error occurred while updating a claim.', {
-        duration: 4,
-        id: 'error-save-claim',
-      })
+      handleRequestError(error)
       action.setLoadingForm({ loading: false })
     }
   }),
@@ -101,10 +90,7 @@ const claim = {
       await DeleteClaim(payload)
       action.setLoadingDelete({ loading: false })
     } catch (error) {
-      toaster.danger('An error occurred while deleting a claim.', {
-        duration: 4,
-        id: 'error-save-claim',
-      })
+      handleRequestError(error)
       action.setLoadingDelete({ loading: false })
     }
   }),
@@ -112,9 +98,6 @@ const claim = {
     state.claims = payload.results || []
   }),
   setClaim: action((state, payload) => {
-    //if (payload.contexts) {
-    //payload.contexts = payload.contexts.map((item) => item._key)
-    //}
     state.claim = payload || {}
   }),
   setClaimParents: action((state, payload) => {

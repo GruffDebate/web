@@ -54,7 +54,7 @@ api.interceptors.response.use(
           window.location.pathname.includes('contexts')
         ) {
           if (error.response.status === 403) {
-            toaster.warning('Do not have permission', { duration: 5 })
+            toaster.warning('You do not have permission', { duration: 5 })
             return
           }
           toaster.danger('Session expired', { duration: 5 })
@@ -62,7 +62,7 @@ api.interceptors.response.use(
           window.location.href = '/'
         } else if (!window.location.pathname.includes('login')) {
           if (error.response.status === 403) {
-            toaster.warning('Do not have permission', { duration: 5 })
+            toaster.warning('You do not have permission', { duration: 5 })
             return
           }
           toaster.danger('Session expired', { duration: 5 })
@@ -89,4 +89,18 @@ export const request = (req) => {
     data: req.payload || null,
     method: req.method,
   })
+}
+
+export const handleRequestError = (error) => {
+  if (error.response.data) {
+    toaster.danger(error.response.data.message, {
+      duration: 4,
+      id: 'error-toaster',
+    })
+  } else {
+    toaster.danger('Error: ' + error, {
+      duration: 4,
+      id: 'error-toaster',
+    })
+  }
 }

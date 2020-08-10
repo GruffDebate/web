@@ -2,6 +2,7 @@ import { thunk, action } from 'easy-peasy'
 import { GetArgument, CreateArgument, UpdateArgument } from '../services/argument'
 import { get } from 'lodash'
 import { toaster } from 'evergreen-ui'
+import { handleRequestError } from '../utils/api'
 
 const argument = {
   isLoading: false,
@@ -18,9 +19,7 @@ const argument = {
       action.setArgument(response.data)
       action.setShow(true)
     } catch (error) {
-      action.setError({
-        message: 'There was an error loading claims.',
-      })
+      handleRequestError(error)
     }
   }),
   createArgument: thunk(async (action, payload) => {
@@ -30,10 +29,7 @@ const argument = {
       action.setShow(false)
       action.setLoadingForm({ loading: false })
     } catch (error) {
-      toaster.danger('An error occurred while creating a argument.', {
-        duration: 4,
-        id: 'error-save-argument',
-      })
+      handleRequestError(error)
       action.setLoadingForm({ loading: false })
     }
   }),
@@ -48,10 +44,7 @@ const argument = {
       action.setShow(false)
       action.setLoadingForm({ loading: false })
     } catch (error) {
-      toaster.danger('An error occurred while updating a argument.', {
-        duration: 4,
-        id: 'error-save-argument',
-      })
+      handleRequestError(error)
       action.setLoadingForm({ loading: false })
     }
   }),

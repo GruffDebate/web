@@ -9,6 +9,7 @@ import {
 } from '../services/context'
 import { get } from 'lodash'
 import { toaster } from 'evergreen-ui'
+import { handleRequestError } from '../utils/api'
 
 const context = {
   isLoading: false,
@@ -29,9 +30,7 @@ const context = {
       const response = await ListContext()
       action.setList(response.data)
     } catch (error) {
-      action.setError({
-        message: 'There was an error loading contexts.',
-      })
+      handleRequestError(error)
     }
   }),
   filter: thunk(async (action, payload) => {
@@ -39,9 +38,7 @@ const context = {
       const response = await FilterContext(payload.search)
       action.setList(response.data)
     } catch (error) {
-      action.setError({
-        message: 'There was an error querying contexts.',
-      })
+      handleRequestError(error)
     }
   }),
   get: thunk(async (action, payload) => {
@@ -52,9 +49,7 @@ const context = {
         action.setShow(true)
       }
     } catch (error) {
-      action.setError({
-        message: 'There was an error loading context.',
-      })
+      handleRequestError(error)
     }
   }),
   create: thunk(async (action, payload) => {
@@ -64,10 +59,7 @@ const context = {
       action.setShow(false)
       action.setLoadingForm({ loading: false })
     } catch (error) {
-      toaster.danger('An error occurred while creating a context.', {
-        duration: 4,
-        id: 'error-save-context',
-      })
+      handleRequestError(error)
       action.setLoadingForm({ loading: false })
     }
   }),
@@ -86,10 +78,7 @@ const context = {
       action.setShow(false)
       action.setLoadingForm({ loading: false })
     } catch (error) {
-      toaster.danger('An error occurred while updating a context.', {
-        duration: 4,
-        id: 'error-save-context',
-      })
+      handleRequestError(error)
       action.setLoadingForm({ loading: false })
     }
   }),
@@ -99,16 +88,12 @@ const context = {
       await DeleteContext(payload)
       action.setLoadingForm({ loading: false })
     } catch (error) {
-      toaster.danger('An error occurred while deleting a context.', {
-        duration: 4,
-        id: 'error-save-context',
-      })
+      handleRequestError(error)
       action.setLoadingForm({ loading: false })
     }
   }),
   setList: action((state, payload) => {
     state.contexts = payload.results || []
-    console.log(`----------------setList:`)
     console.dir(state.contexts)
   }),
   setModel: action((state, payload) => {
