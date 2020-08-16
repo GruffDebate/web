@@ -1,5 +1,6 @@
 import { thunk, action } from 'easy-peasy'
-import { GetArgument, CreateArgument, UpdateArgument } from '../services/argument'
+import { GetArgument, CreateArgument, UpdateArgument, DeleteArgument } from '../services/argument'
+import { GetClaim } from '../services/claim'
 import { get } from 'lodash'
 import { toaster } from 'evergreen-ui'
 import { handleRequestError } from '../utils/api'
@@ -15,9 +16,11 @@ const argument = {
   },
   getArgument: thunk(async (action, payload) => {
     try {
-      const response = await GetArgument(payload)
+      const response = await GetArgument(payload.id)
       action.setArgument(response.data)
-      action.setShow(true)
+      if (payload.show) {
+        action.setShow(true)
+      }
     } catch (error) {
       handleRequestError(error)
     }
@@ -48,8 +51,39 @@ const argument = {
       action.setLoadingForm({ loading: false })
     }
   }),
+  deleteClaim: thunk(async (action, payload) => {
+    try {
+      action.setLoadingDelete({ loading: true })
+      await DeleteArgument(payload)
+      action.setLoadingDelete({ loading: false })
+    } catch (error) {
+      handleRequestError(error)
+      action.setLoadingDelete({ loading: false })
+    }
+  }),
+  getArgumentTarget: thunk(async (action, payload) => {
+    try {
+      console.log(payload)
+      console.log(payload.claimId)
+      if (payload.claimId) {
+        const response = await GetClaim(payload.claimId)
+        action.setTargetClaim(response.data)
+      } else if (payload.argumentId) {
+        const response = await GetArgument(payload.argumentId)
+        action.setTargetArgument(response.data)
+      }
+    } catch (error) {
+      handleRequestError(error)
+    }
+  }),
   setArgument: action((state, payload) => {
     state.argument = payload || {}
+  }),
+  setTargetArgument: action((state, payload) => {
+    state.argument.targetArgument = payload || {}
+  }),
+  setTargetClaim: action((state, payload) => {
+    state.argument.targetClaim = payload || {}
   }),
   setLoadingForm: action((state, payload) => {
     const loading = get(payload, 'loading', false)

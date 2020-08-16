@@ -25,3 +25,12 @@ export const UpdateArgument = (id, payload) => {
     payload,
   })
 }
+
+export const DeleteArgument = (id, payload) => {
+  return request({
+    method: 'delete',
+    baseUrl: 'api',
+    route: `arguments/${id}`,
+    payload,
+  })
+}

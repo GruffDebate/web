@@ -92,7 +92,7 @@ export const request = (req) => {
 }
 
 export const handleRequestError = (error) => {
-  if (error.response.data) {
+  if (error.response && error.response.data) {
     toaster.danger(error.response.data.message, {
       duration: 4,
       id: 'error-toaster',
